@@ -40,9 +40,9 @@
         body.reduce-motion * { transition: none !important; animation: none !important; }
 
         /* --- LAYOUT VIEWS --- */
-        #login-view, #rsvp-intercept-view, #dashboard-view { padding: 20px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        #login-view, #rsvp-intercept-view, #dashboard-view, #video-overlay-view { padding: 20px; display: flex; flex-direction: column; align-items: center; width: 100%; }
         #login-view, #rsvp-intercept-view { min-height: 100vh; justify-content: center; }
-        #rsvp-intercept-view, #dashboard-view { display: none; }
+        #rsvp-intercept-view, #dashboard-view, #video-overlay-view { display: none; }
         .container { width: 100%; max-width: 1200px; margin-top: 15px; }
 
         /* --- MASONRY GRID SYSTEM --- */
@@ -249,6 +249,30 @@
             transition: opacity 0.3s;
         }
         .toggle-password-btn:hover { opacity: 1; }
+
+        /* VIDEO OVERLAY STYLES */
+        #video-overlay-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            z-index: 5000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        #welcome-video {
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            /* Specifically styled for YouTube Shorts format */
+            width: 360px;
+            height: 640px;
+            max-width: 90vw;
+            max-height: 80vh;
+        }
     </style>
 </head>
 <body>
@@ -287,6 +311,11 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="video-overlay-view">
+        <iframe id="welcome-video" src="https://www.youtube.com/embed/ub78jssgZNM?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <button class="btn" style="margin-top: 25px; padding: 12px 30px; background: rgba(255,255,255,0.2); color: #fff !important; border: 1px solid rgba(255,255,255,0.4);" onclick="finishVideo()">Continue to Portal ➔</button>
     </div>
 
     <div id="widget-builder-view">
@@ -471,7 +500,7 @@
             </div>
 
             <div id="settings-dash" class="tab-content" style="display: none;">
-                <div class="card full-width">
+                <div class="widget-card full-width">
                     <div class="settings-layout">
                         
                         <div class="settings-sidebar">
@@ -627,7 +656,7 @@
 
     <script>
         // =========================================================================
-        // --- DATA LAYER CONFIGURATIONS & DEFAULTS ---
+        // --- 1. DATA LAYER CONFIGURATIONS & DEFAULTS ---
         // =========================================================================
         const targetCountdownDateString = "June 27, 2026 00:00:00";
 
@@ -695,7 +724,9 @@
         function getClues() { return JSON.parse(localStorage.getItem('portalClues')) || defaultClues; }
         function getBulletins() { return JSON.parse(localStorage.getItem('portalBulletins')) || defaultBulletins; }
 
-        // --- AUTH GATEWAYS ---
+        // =========================================================================
+        // --- 2. AUTH GATEWAYS & PASSWORD TOGGLE ---
+        // =========================================================================
         function togglePassword() {
             const pwdInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eye-icon');
@@ -734,11 +765,39 @@
             }
         }
 
+        // =========================================================================
+        // --- VIDEO OVERLAY & RSVP LOGIC ---
+        // =========================================================================
         function submitInterceptRSVP(answer) {
             localStorage.setItem(`portalInterceptAnswered_${currentUsername}`, "true");
             localStorage.setItem(`portalInterceptAnswerValue_${currentUsername}`, answer);
             document.getElementById('rsvp-intercept-view').style.display = 'none';
-            launchDashboardSystem();
+            
+            // If they said yes, show the video overlay
+            if (answer.includes('Yes')) {
+                document.getElementById('video-overlay-view').style.display = 'flex';
+            } else {
+                // If they said no, just go straight to the portal
+                finishVideo();
+            }
+        }
+
+        function finishVideo() {
+            const vid = document.getElementById('welcome-video');
+            // Reset the iframe src to stop the YouTube video from playing in the background
+            const currentSrc = vid.src;
+            vid.src = '';
+            vid.src = currentSrc;
+
+            document.getElementById('video-overlay-view').style.display = 'none';
+            
+            // Fix: Check if display is NOT flex (since it starts as "")
+            if(document.getElementById('dashboard-view').style.display !== 'flex') {
+                launchDashboardSystem();
+            } else {
+                renderGlobalStatusBoard();
+                if(guests[currentUsername].layout === 'host') renderHostDashboardData();
+            }
         }
 
         function resetInterceptRSVP() {
@@ -746,7 +805,9 @@
             location.reload();
         }
 
-        // --- LAYOUT RENDERING ENGINE ---
+        // =========================================================================
+        // --- 3. LAYOUT RENDERING ENGINE ---
+        // =========================================================================
         function launchDashboardSystem() {
             document.getElementById('dashboard-view').style.display = 'flex';
             const isHost = guests[currentUsername].layout === "host";
@@ -794,7 +855,9 @@
             });
         }
 
-        // --- LAYOUT BUILDER DRAG & DROP ENGINE ---
+        // =========================================================================
+        // --- 4. LAYOUT BUILDER DRAG & DROP ENGINE ---
+        // =========================================================================
         let draggedIndex = -1;
 
         function openWidgetBuilder() {
@@ -863,7 +926,9 @@
             document.getElementById('dashboard-view').style.display = 'flex';
         }
 
-        // --- SETTINGS NAVIGATION ---
+        // =========================================================================
+        // --- 5. SETTINGS NAVIGATION ---
+        // =========================================================================
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -878,7 +943,9 @@
             document.getElementById(`stab-link-${subTabId}`).classList.add('active');
         }
 
-        // --- CONTRAST ENGINE MODULATORS ---
+        // =========================================================================
+        // --- 6. CONTRAST ENGINE MODULATORS & THEMES ---
+        // =========================================================================
         function getContrast(hexcolor) {
             hexcolor = hexcolor.replace("#", "");
             if (hexcolor.length === 3) hexcolor = hexcolor.split('').map(c => c + c).join('');
@@ -887,13 +954,21 @@
         }
 
         function analyzeThemeName(bgHex, accentHex) {
-            const r = parseInt(bgHex.slice(1,3), 16), g = parseInt(bgHex.slice(3,5), 16), b = parseInt(bgHex.slice(5,7), 16);
-            if (r > 200 && g < 100 && b < 100) return "Sunset Blaze";
-            if (g > 200 && r < 100) return "Forest Canopy";
-            if (b > 200 && r < 100) return "Deep Ocean";
-            if (r > 200 && g > 200 && b < 100) return "Desert Sand";
-            if (r < 50 && g < 50 && b < 50) return "Midnight Velvet";
-            return "Mystic Blend";
+            const getHSL = (hex) => {
+                let r=parseInt(hex.slice(1,3),16)/255, g=parseInt(hex.slice(3,5),16)/255, b=parseInt(hex.slice(5,7),16)/255;
+                let max=Math.max(r,g,b), min=Math.min(r,g,b), h, s, l=(max+min)/2;
+                if(max===min) h=s=0; else {
+                    let d=max-min; s=l>0.5 ? d/(2-max-min) : d/(max+min);
+                    switch(max) { case r: h=(g-b)/d+(g<b?6:0); break; case g: h=(b-r)/d+2; break; case b: h=(r-g)/d+4; break; } h/=6;
+                }
+                return {h:Math.round(h*360), s:Math.round(s*100), l:Math.round(l*100)};
+            };
+            const bg = getHSL(bgHex);
+            if(bg.l < 30) return bg.s < 20 ? "Shadow Realm" : "Electric Midnight";
+            if(bg.h > 20 && bg.h < 45) return "Golden Hour";
+            if(bg.h > 120 && bg.h < 180) return "Forest Mist";
+            if(bg.s < 15) return "Minimalist Concrete";
+            return "Custom Party Vibe";
         }
 
         function setTheme(bg, accent) {
@@ -917,14 +992,12 @@
                 document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
             }
             localStorage.setItem('portalTheme', JSON.stringify({bg, accent}));
+            
+            const sug = document.getElementById('theme-name-suggestion');
+            if(sug) sug.innerText = `"${analyzeThemeName(bg, accent)}"`;
         }
 
-        function customTheme() {
-            const bg = document.getElementById('bg-picker').value;
-            const accent = document.getElementById('accent-picker').value;
-            document.getElementById('theme-name-suggestion').innerText = `"${analyzeThemeName(bg, accent)}"`;
-            setTheme(bg, accent);
-        }
+        function customTheme() { setTheme(document.getElementById('bg-picker').value, document.getElementById('accent-picker').value); }
         
         function saveCustomPreset() {
             const name = document.getElementById('custom-theme-name').value.trim();
@@ -952,29 +1025,14 @@
         }
 
         function generateRandomTheme() {
-            const h = Math.floor(Math.random() * 360), s = Math.floor(Math.random() * 100), l = Math.floor(Math.random() * 100);
-            const bgHex = hslToHex(h, s, l);
-            let accentH, accentS, accentL;
+            const f = (n,h,s,l) => { const k=(n+h/30)%12; const c=l-s*Math.min(l,1-l)*Math.max(Math.min(k-3,9-k,1),-1); return Math.round(255*c).toString(16).padStart(2,'0'); };
+            const h = Math.floor(Math.random()*360), s = Math.floor(Math.random()*80)+20, l = Math.floor(Math.random()*60)+20;
+            const bgHex = `#${f(0,h,s/100,l/100)}${f(8,h,s/100,l/100)}${f(4,h,s/100,l/100)}`;
+            const ah = Math.random()>0.5 ? h : (h+180)%360, al = Math.max(10, l-40);
+            const accentHex = `#${f(0,ah,s/100,al/100)}${f(8,ah,s/100,al/100)}${f(4,ah,s/100,al/100)}`;
             
-            if (Math.random() > 0.5) { accentH = h; accentS = s; } 
-            else { accentH = (h + 180) % 360; accentS = s; }
-            
-            accentL = Math.max(5, l - 40); 
-            const accentHex = hslToHex(accentH, accentS, accentL);
-
             document.getElementById('theme-name-suggestion').innerText = `"${analyzeThemeName(bgHex, accentHex)}"`;
             setTheme(bgHex, accentHex);
-        }
-
-        function hslToHex(h, s, l) {
-            l /= 100;
-            const a = s * Math.min(l, 1 - l) / 100;
-            const f = n => {
-                const k = (n + h / 30) % 12;
-                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-                return Math.round(255 * color).toString(16).padStart(2, '0');
-            };
-            return `#${f(0)}${f(8)}${f(4)}`;
         }
 
         // --- TYPOGRAPHY SYSTEMS ---
@@ -1038,7 +1096,10 @@
             }
         }
 
-        // --- REAL-TIME SECRET MISSION OBJECTS ENGINE ---
+        // =========================================================================
+        // --- 7. REAL-TIME WIDGET ENGINES ---
+        // =========================================================================
+        
         function renderMissionWidget() {
             const container = document.getElementById('mission-content-area');
             if(!container) return;
@@ -1066,7 +1127,6 @@
             renderMissionWidget();
         }
 
-        // --- REAL-TIME Q&A INTERFACES ---
         function submitGuestQuestion() {
             const input = document.getElementById('guest-question-input'), qText = input.value.trim();
             if(!qText) return;
