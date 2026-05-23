@@ -73,6 +73,26 @@
         .widget-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 8px 20px rgba(0,0,0,0.04); }
         body.dark-mode .widget-card { border-top: 1px solid rgba(255,255,255,0.1); border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(0,0,0,0.3); border-bottom: 1px solid rgba(0,0,0,0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius);
+            border-top: 1px solid rgba(255,255,255,0.6);
+            border-left: 1px solid rgba(255,255,255,0.4);
+            border-right: 1px solid rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.04), 0 5px 15px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        body.dark-mode .card {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-left: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
         h1, h2, h3, h4 { color: var(--accent-main); margin-bottom: 15px; transition: color 0.5s ease; letter-spacing: -0.5px; }
         body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, body.dark-mode h4 { color: var(--text-adaptive); }
 
@@ -273,7 +293,203 @@
             max-width: 90vw;
             max-height: 80vh;
         }
+
+        /* FOCUS SIDEBAR VIEW STYLES */
+        .sidebar-tab-btn {
+            background: rgba(255,255,255,0.4);
+            border: 2px solid transparent;
+            padding: 12px 18px;
+            font-weight: bold;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 18px;
+            color: var(--text-adaptive);
+            transition: var(--transition);
+            width: 100%;
+        }
+        body.dark-mode .sidebar-tab-btn {
+            background: rgba(0,0,0,0.2);
+        }
+        .sidebar-tab-btn:hover {
+            background: rgba(255,255,255,0.7);
+            transform: translateY(-2px);
+        }
+        body.dark-mode .sidebar-tab-btn:hover {
+            background: rgba(0,0,0,0.4);
+        }
+        .sidebar-tab-btn.active {
+            background: var(--accent-main);
+            color: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            #focus-layout-container {
+                flex-direction: column !important;
+            }
+            #focus-sidebar {
+                width: 100% !important;
+                flex-direction: row !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+                max-height: none !important;
+                padding: 12px !important;
+                mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+                -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+            }
+            #focus-sidebar::-webkit-scrollbar {
+                height: 4px;
+            }
+            .sidebar-tab-btn {
+                width: auto !important;
+                padding: 10px 16px !important;
+            }
+        }
+
+        /* TUTORIAL HIGHLIGHT STYLES */
+        @keyframes targetPulse {
+            0% { box-shadow: 0 0 0 0 var(--accent-main); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+        }
+        .tutorial-highlight {
+            animation: targetPulse 1.5s infinite;
+            position: relative;
+            z-index: 10005 !important;
+            box-shadow: 0 0 0 4px var(--accent-main), 0 10px 25px rgba(0,0,0,0.15) !important;
+            border-color: var(--accent-main) !important;
+        }
+        .tutorial-parent-elevated {
+            position: relative;
+            z-index: 10002 !important;
+        }
+        @keyframes tutorialFadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .tutorial-step-content {
+            animation: tutorialFadeIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes arrowBounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -6px); }
+        }
+        #tutorial-arrow {
+            animation: arrowBounce 1.2s infinite ease-in-out;
+        }
+
+        /* TUTORIAL RUNNING AND CLICK BLOCKING */
+        body.tutorial-running button,
+        body.tutorial-running select,
+        body.tutorial-running input,
+        body.tutorial-running a {
+            opacity: 0.4;
+            transition: opacity 0.3s ease;
+        }
+        body.tutorial-running .tutorial-highlight,
+        body.tutorial-running .tutorial-highlight *,
+        body.tutorial-running #tutorial-overlay,
+        body.tutorial-running #tutorial-overlay *,
+        body.tutorial-running #tutorial-card-container,
+        body.tutorial-running #tutorial-card-container * {
+            pointer-events: auto !important;
+            opacity: 1 !important;
+        }
+
+        /* Speech Bubble styles */
+        .speech-bubble {
+            position: relative;
+            background: var(--bg-main);
+            border: 2px solid var(--accent-main);
+            border-radius: 18px;
+            padding: 10px 14px;
+            margin-bottom: 15px;
+            color: var(--text-adaptive);
+            font-size: 0.9em;
+            font-weight: bold;
+            font-style: italic;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            max-width: 90%;
+            word-wrap: break-word;
+            text-align: center;
+            display: inline-block;
+            animation: floatBubble 4s infinite ease-in-out;
+            z-index: 2;
+            transition: background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease;
+        }
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--accent-main);
+            transition: border-top-color 0.6s ease;
+        }
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 8px solid var(--bg-main);
+            z-index: 3;
+            transition: border-top-color 0.6s ease;
+        }
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* Focus layout stretch styles */
+        #focus-layout-container {
+            align-items: stretch !important;
+        }
+        #focus-content-area {
+            display: flex;
+            flex-direction: column;
+        }
+        #focus-content-area .widget-card {
+            height: 100%;
+            min-height: 550px;
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        @media (max-width: 768px) {
+            #focus-content-area .widget-card {
+                min-height: calc(100vh - 220px) !important;
+            }
+        }
+        #focus-content-area .widget-card > h3 {
+            margin-bottom: 20px;
+            flex-shrink: 0;
+        }
+        #focus-content-area #countdown,
+        #focus-content-area .marquee-wrapper,
+        #focus-content-area .rsvp-row,
+        #focus-content-area #status-select,
+        #focus-content-area #mission-content-area,
+        #focus-content-area #guest-qa-container,
+        #focus-content-area #global-status-board,
+        #focus-content-area #checklist-box,
+        #focus-content-area #notes-list,
+        #focus-content-area #bulletin-list,
+        #focus-content-area #hype-count {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
     </style>
+    <!-- Firebase Compatibility SDK Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -285,17 +501,26 @@
         <div class="container" style="max-width: 420px; text-align: center;">
             <div class="card" style="padding: 40px;">
                 <h1 style="font-size: 2.5em; margin-bottom: 5px;">Dominik's Portal</h1>
-                <p style="margin-bottom: 30px; opacity: 0.8; font-size: 1.1em;">Enter your invite credentials</p>
-                <div id="login-error" style="background: rgba(255,0,0,0.1); color: #d9534f; padding: 12px; border-radius: 15px; margin-bottom: 20px; display: none; font-weight: bold;">Wrong details, try again!</div>
+                <p id="login-instruction" style="margin-bottom: 30px; opacity: 0.8; font-size: 1.1em;">Enter your invite details</p>
                 
-                <input type="text" id="username" placeholder="Username" autocomplete="off">
-                
-                <div class="password-container">
-                    <input type="password" id="password" placeholder="Password" style="margin-bottom: 20px;">
-                    <button class="toggle-password-btn" onclick="togglePassword()" id="eye-icon">👁️</button>
+                <div id="quick-login-container" style="display: none; margin-bottom: 25px; background: rgba(255,255,255,0.4); padding: 20px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
+                    <p style="margin-bottom: 15px; font-weight: bold;">Welcome back!</p>
+                    <button id="quick-login-btn" class="btn" style="width: 100%; padding: 16px; font-size: 1.1em; margin-bottom: 12px;" onclick="quickLogin()">Continue as Guest 🎉</button>
+                    <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="showStandardLogin()">Use a different account</button>
                 </div>
 
-                <button class="btn" onclick="checkLogin()" style="width: 100%; padding: 16px; margin-top: 10px; font-size: 1.1em;">Enter Party  🎉</button>
+                <div id="standard-login-fields">
+                    <div id="login-error" style="background: rgba(255,0,0,0.1); color: #d9534f; padding: 12px; border-radius: 15px; margin-bottom: 20px; display: none; font-weight: bold;">Wrong details, try again!</div>
+                    
+                    <input type="text" id="username" placeholder="Username" autocomplete="off">
+                    
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Password" style="margin-bottom: 20px;">
+                        <button class="toggle-password-btn" onclick="togglePassword()" id="eye-icon">👁️</button>
+                    </div>
+
+                    <button class="btn" onclick="checkLogin()" style="width: 100%; padding: 16px; margin-top: 10px; font-size: 1.1em;">Enter Party  🎉</button>
+                </div>
             </div>
         </div>
     </div>
@@ -303,7 +528,7 @@
     <div id="rsvp-intercept-view">
         <div class="container" style="max-width: 550px; text-align: center;">
             <div class="card" style="padding: 40px;">
-                <h2 style="font-size: 2em; margin-bottom: 15px;">Date Availability Check 🗓️</h2>
+                <h2 style="font-size: 2em; margin-bottom: 15px;">Are you coming? 🗓️</h2>
                 <p style="margin-bottom: 30px; opacity: 0.9; line-height: 1.5; font-size: 1.1em;">Can you join us for the celebrations on <br><strong>June 27th to June 28th</strong>?</p>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
                     <button class="btn" onclick="submitInterceptRSVP('Yes, I can make it!')" style="background:#2F855A; flex: 1; min-width: 200px; padding: 16px;">Yes, Absolutely! 👍</button>
@@ -314,20 +539,20 @@
     </div>
 
     <div id="video-overlay-view">
-        <iframe id="welcome-video" src="https://www.youtube.com/embed/ub78jssgZNM?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <iframe id="welcome-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         <button class="btn" style="margin-top: 25px; padding: 12px 30px; background: rgba(255,255,255,0.2); color: #fff !important; border: 1px solid rgba(255,255,255,0.4);" onclick="finishVideo()">Continue to Portal ➔</button>
     </div>
 
     <div id="widget-builder-view">
         <div class="builder-sidebar">
-            <h2 style="font-size: 1.8em; margin-bottom:5px;">Layout Engine</h2>
-            <p style="opacity:0.8; margin-bottom: 25px; line-height:1.4;">Drag the ☰ icon to reorder widgets. Uncheck toggles to hide them.</p>
+            <h2 style="font-size: 1.8em; margin-bottom:5px;">Arrange Widgets</h2>
+            <p style="opacity:0.8; margin-bottom: 25px; line-height:1.4;">Drag the ☰ icon to rearrange widgets. Uncheck them to hide them from your dashboard.</p>
             
             <ul id="builder-widget-list" style="list-style: none; padding: 0; flex-grow:1; overflow-y:auto; padding-right:5px;">
                 </ul>
 
             <div style="margin-top:20px; padding-top:20px; border-top:1px solid rgba(128,128,128,0.2);">
-                <button class="btn" onclick="saveAndCloseBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;">💾 Save Dashboard Layout</button>
+                <button class="btn" onclick="saveAndCloseBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;">💾 Save Layout</button>
             </div>
         </div>
         <div class="builder-preview-area">
@@ -341,12 +566,18 @@
             <h2 id="greeting" style="font-size: 2.5em; margin-bottom: 25px; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.05);"></h2>
             
             <div class="nav-tabs">
-                <button class="tab-btn active" onclick="showTab('main-dash')">🏠 Home Hub</button>
-                <button class="tab-btn" onclick="showTab('settings-dash')">⚙️ Settings Options</button>
+                <button class="tab-btn active" onclick="showTab('main-dash', event)">🏠 Home</button>
+                <button class="tab-btn" onclick="showTab('attendance-dash', event)">👥 Who's Coming</button>
+                <button class="tab-btn" onclick="showTab('settings-dash', event)">⚙️ Settings</button>
             </div>
 
             <div id="main-dash" class="tab-content">
                 
+                <div id="layout-toggle-container" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
+                    <button id="layout-grid-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em;" onclick="switchLayoutMode('grid')">📱 Grid View</button>
+                    <button id="layout-focus-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="switchLayoutMode('focus')">🔍 Sidebar View</button>
+                </div>
+
                 <div class="dashboard-grid" id="main-widget-grid">
                     
                     <div class="widget-card full-width" id="widget-countdown" style="text-align: center;">
@@ -360,7 +591,7 @@
                     </div>
 
                     <div class="widget-card full-width" id="widget-marquee">
-                        <h3>🎁 Dominik's Present Blueprint Ideas</h3>
+                        <h3>🎁 Dominik's Present Ideas</h3>
                         <div class="marquee-wrapper">
                             <div class="marquee-content" id="marquee-ticker"></div>
                         </div>
@@ -375,11 +606,16 @@
 
                     <div class="widget-card" id="widget-status">
                         <h3>📍 Update Your Status</h3>
-                        <select id="status-select" onchange="updateMyGlobalStatus()" style="margin-bottom:0; font-weight:bold;">
+                        <select id="status-select" onchange="updateMyGlobalStatus()" style="margin-bottom:15px; font-weight:bold;">
                             <option value="🏠 Sitting at home">🏠 Sitting at home</option>
                             <option value="🚗 En Route / Travelling">🚗 En Route / Travelling</option>
                             <option value="🎪 At the Gazebo! 🎉">🎪 At the Gazebo! 🎉</option>
                         </select>
+                        <p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Say something to other guests:</p>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="status-custom-input" placeholder="Type a custom message..." style="margin-bottom:0; flex-grow:1;">
+                            <button class="btn" onclick="saveCustomStatus()" style="padding:14px 20px;">Post</button>
+                        </div>
                     </div>
 
                     <div class="widget-card" id="widget-mission">
@@ -441,23 +677,52 @@
                             </p>
                         </div>
                         <div style="flex:0 0 auto;">
-                            <button class="btn" style="padding:18px 30px; font-size:1.1em;" onclick="window.open('https://www.google.com/maps/search/59+Lochend+Drive')">Get Route Maps</button>
+                            <button id="location-route-btn" class="btn" style="padding:18px 30px; font-size:1.1em;" onclick="window.open('https://www.google.com/maps/search/59+Lochend+Drive')">Get Route Maps</button>
                         </div>
                     </div>
 
                     <div class="widget-card full-width" id="widget-host-stats">
-                        <h3>🛡️ Host Control Console</h3>
-                        <p style="margin-bottom:25px; opacity:0.8; font-size:1.1em;">Live portal usage, RSVP aggregations, and global metrics.</p>
+                        <h3>🛡️ Admin Controls</h3>
+                        <p style="margin-bottom:25px; opacity:0.8; font-size:1.1em;">See guest RSVPs, total hype, and statuses.</p>
                         <div class="admin-stat-grid">
-                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-total-hype">0</div>Total Global Hype Clicks</div>
-                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-rsvp-yes">0</div>Confirmed June 27-28</div>
-                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-at-gazebo">0</div>Guests at Gazebo</div>
+                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-total-hype">0</div>Total Hype Clicks</div>
+                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-rsvp-yes">0</div>Guests Coming (June 27-28)</div>
+                            <div class="admin-stat-box"><div class="admin-stat-num" id="stat-at-gazebo">0</div>Guests at the Gazebo</div>
+                        </div>
+                        
+                        <!-- Collapsible Firebase Setup Instructions -->
+                        <div style="margin-top: 25px; padding-top: 20px; border-top: 1px solid rgba(128,128,128,0.15);">
+                            <details style="text-align: left; cursor: pointer; outline: none;">
+                                <summary style="font-weight: bold; color: var(--accent-main); font-size: 0.95em; display: flex; align-items: center; gap: 8px;">
+                                    🌐 Cloud Sync Setup Instructions (Firebase)
+                                </summary>
+                                <div style="margin-top: 15px; padding: 18px; background: rgba(255,255,255,0.4); border-radius: 18px; font-size: 0.85em; line-height: 1.5; cursor: default;">
+                                    <p style="margin-bottom: 10px;">To enable live, real-time database sync across multiple devices (e.g. from guests at home or across the city), follow these simple steps to configure Firebase:</p>
+                                    <ol style="margin-left: 20px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px;">
+                                        <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" style="color: var(--accent-main); font-weight: bold; text-decoration: underline;">Firebase Console</a> and log in with your Google account.</li>
+                                        <li>Click <strong>Add Project</strong>, name it (e.g., "birthday-portal"), and disable Google Analytics (optional).</li>
+                                        <li>Once ready, click the <strong>Web icon (&lt;/&gt;)</strong> to register your web application.</li>
+                                        <li>Create a database: Click <strong>Realtime Database</strong> in the left sidebar, click <strong>Create Database</strong>, select your location, and start in <strong>locked mode</strong> (or test mode).</li>
+                                        <li>Navigate to database <strong>Rules</strong> tab and set both <code>.read</code> and <code>.write</code> to <code>true</code> (so guests can read/write without authentication):
+                                            <pre style="background: rgba(0,0,0,0.05); padding: 8px; border-radius: 8px; margin-top: 5px; font-family: monospace;">{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}</pre>
+                                        </li>
+                                        <li>Go to Project Settings (gear icon next to Project Overview) and copy the values from the <code>firebaseConfig</code> object.</li>
+                                        <li>Open this <code>BDAY.html</code> file in any text editor, locate the <code>firebaseConfig</code> object around line 890, paste your keys, and save.</li>
+                                    </ol>
+                                    <p style="font-style: italic; opacity: 0.85;">Note: If no Firebase configuration is entered, the portal automatically falls back to storing data locally inside each user's browser (LocalStorage).</p>
+                                </div>
+                            </details>
                         </div>
                     </div>
 
                     <div class="widget-card" id="widget-host-status">
-                        <h3>📢 Update Your Status</h3>
-                        <p style="font-size:0.9em; opacity:0.8; margin-bottom:12px;">Change what guests see next to your name on the Attendance Board:</p>
+                        <h3>📢 Update Host Status</h3>
+                        <p style="font-size:0.9em; opacity:0.8; margin-bottom:12px;">Change the status message shown next to your name on the guest list:</p>
                         <div style="display: flex; gap: 10px;">
                             <input type="text" id="dom-status-input" placeholder="expecting you there on the day" style="margin-bottom: 0; flex-grow: 1;">
                             <button class="btn" onclick="saveDomStatus()">Update</button>
@@ -465,13 +730,13 @@
                     </div>
 
                     <div class="widget-card" id="widget-host-manifest">
-                        <h3>📋 Guest Status Manifest</h3>
+                        <h3>📋 Guest List Manifest</h3>
                         <div class="status-container" id="dominik-manifest-board"></div>
                     </div>
 
                     <div class="widget-card" id="widget-host-qa">
-                        <h3>📥 Guest Inquiries Queue</h3>
-                        <p style="font-size:0.95em; opacity:0.8; margin-bottom:20px;">Provide answers to your guests' operational questions:</p>
+                        <h3>📥 Guest Questions</h3>
+                        <p style="font-size:0.95em; opacity:0.8; margin-bottom:20px;">Answer questions from guests here:</p>
                         <div id="host-qa-queue-container" style="display:flex; flex-direction:column; gap:15px;"></div>
                     </div>
 
@@ -487,15 +752,55 @@
                     </div>
 
                     <div class="widget-card" id="widget-host-clues">
-                        <h3>🎁 Manage News Ribbon (Clues)</h3>
-                        <p style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">Add hints to the scrolling conveyor belt for guests.</p>
+                        <h3>🎁 Manage Present Hints</h3>
+                        <p style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">Add clues to the scrolling banner at the top of guest dashboards.</p>
                         <div id="admin-clues-list" style="max-height: 250px; overflow-y:auto; margin-bottom:15px; padding-right:5px;"></div>
                         <div style="display: flex; gap: 10px; align-items:center;">
                             <input type="text" id="new-clue-text" placeholder="New present hint..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="addAdminClue()" style="padding:14px 20px;">Add Clue</button>
+                            <button class="btn" onclick="addAdminClue()" style="padding:14px 20px;">Add Hint</button>
                         </div>
                     </div>
 
+                </div>
+
+                <!-- Focus View Layout Container -->
+                <div id="focus-layout-container" style="display: none; width: 100%; gap: 25px; align-items: flex-start; margin-bottom: 40px;">
+                    <!-- Sidebar Focus Tab Selectors -->
+                    <div id="focus-sidebar" style="width: 280px; flex-shrink: 0; background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius); padding: 25px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(255,255,255,0.6); border-left: 1px solid rgba(255,255,255,0.4); border-right: 1px solid rgba(0,0,0,0.05); border-bottom: 1px solid rgba(0,0,0,0.05); box-shadow: 0 15px 35px rgba(0,0,0,0.04), 0 5px 15px rgba(0,0,0,0.02); transition: var(--transition);">
+                        <!-- Sidebar tabs will be dynamically rendered here -->
+                    </div>
+                    <!-- Focused Content Area -->
+                    <div id="focus-content-area" style="flex: 1; min-width: 0;">
+                        <!-- The single selected widget will be rendered here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="attendance-dash" class="tab-content" style="display: none;">
+                <div class="widget-card full-width" style="text-align: center; margin-bottom: 25px;">
+                    <h2>👥 Guest Attendance Board</h2>
+                    <p style="opacity: 0.8; font-size: 1.1em; margin-bottom: 25px;">See who's joining the celebrations on June 27th - June 28th!</p>
+                    
+                    <!-- Stats summary cards -->
+                    <div class="admin-stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 10px;">
+                        <div class="admin-stat-box" style="background: rgba(255,255,255,0.4); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.5);">
+                            <div class="admin-stat-num" id="guest-stat-yes" style="color: #2F855A;">0</div>
+                            <strong>Confirmed Attending</strong>
+                        </div>
+                        <div class="admin-stat-box" style="background: rgba(255,255,255,0.4); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.5);">
+                            <div class="admin-stat-num" id="guest-stat-no" style="color: #d9534f;">0</div>
+                            <strong>Unable to Attend</strong>
+                        </div>
+                        <div class="admin-stat-box" style="background: rgba(255,255,255,0.4); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.5);">
+                            <div class="admin-stat-num" id="guest-stat-pending" style="color: var(--accent-main);">0</div>
+                            <strong>Pending Reply</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guests Grid -->
+                <div id="guest-list-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; width: 100%; margin-bottom: 40px;">
+                    <!-- Dynamically populated via JS -->
                 </div>
             </div>
 
@@ -504,51 +809,51 @@
                     <div class="settings-layout">
                         
                         <div class="settings-sidebar">
-                            <button class="sub-tab-btn active" id="stab-link-profile" onclick="showSettingsSubTab('profile')">👤 Account Profile</button>
-                            <button class="sub-tab-btn" id="stab-link-appearance" onclick="showSettingsSubTab('appearance')">🎭 Appearance</button>
+                            <button class="sub-tab-btn active" id="stab-link-profile" onclick="showSettingsSubTab('profile')">👤 My Account</button>
+                            <button class="sub-tab-btn" id="stab-link-appearance" onclick="showSettingsSubTab('appearance')">🎭 Theme & Colors</button>
                             <button class="sub-tab-btn" id="stab-link-accessibility" onclick="showSettingsSubTab('accessibility')">👁️ Accessibility</button>
-                            <button class="sub-tab-btn" id="stab-link-system" onclick="showSettingsSubTab('system')">🛠️ System Data</button>
+                            <button class="sub-tab-btn" id="stab-link-system" onclick="showSettingsSubTab('system')">🛠️ Reset Options</button>
                         </div>
 
                         <div class="settings-content-pane">
                             
                             <div class="settings-sub-pane" id="set-pane-profile">
-                                <h3>Account Session Profile</h3>
-                                <p style="margin-bottom:20px; opacity:0.8;">Your currently authenticated portal environment parameters:</p>
+                                <h3>My Account Profile</h3>
+                                <p style="margin-bottom:20px; opacity:0.8;">Your login details:</p>
                                 <div style="background:rgba(0,0,0,0.02); padding:20px; border-radius:20px; margin-bottom:25px;">
-                                    <p style="margin-bottom:10px;"><strong>Logged Profile Name:</strong> <span id="prof-display-name">---</span></p>
-                                    <p style="margin-bottom:10px;"><strong>Roster Username Handle:</strong> <span id="prof-display-user">---</span></p>
-                                    <p><strong>Security Clearance Status:</strong> <span id="prof-display-role">VIP Invitee</span></p>
+                                    <p style="margin-bottom:10px;"><strong>Name:</strong> <span id="prof-display-name">---</span></p>
+                                    <p style="margin-bottom:10px;"><strong>Username:</strong> <span id="prof-display-user">---</span></p>
+                                    <p><strong>Account Type:</strong> <span id="prof-display-role">Guest</span></p>
                                 </div>
                                 <div class="settings-section">
-                                    <h4>Event Schedule Update Check</h4>
-                                    <p style="opacity:0.75; margin-bottom:12px; font-size:0.9em;">Need to modify your historical choice parameters regarding your availability for the June 27-28 window timeframe?</p>
-                                    <button class="btn" onclick="resetInterceptRSVP()" style="font-size:0.9em; padding:10px 20px;">✏️ Alter June 27-28 RSVP Data Option</button>
+                                    <h4>RSVP Status</h4>
+                                    <p style="opacity:0.75; margin-bottom:12px; font-size:0.9em;">Want to change your availability RSVP answer?</p>
+                                    <button class="btn" onclick="resetInterceptRSVP()" style="font-size:0.9em; padding:10px 20px;">✏️ Change RSVP Answer</button>
                                 </div>
                                 <div class="settings-section" style="border:none; margin-top:20px;">
-                                    <button class="btn" style="background:#d9534f; width:100%;" onclick="location.reload()">Terminate Session & Logout</button>
+                                    <button class="btn" style="background:#d9534f; width:100%;" onclick="location.reload()">Log Out</button>
                                 </div>
                             </div>
 
                             <div class="settings-sub-pane" id="set-pane-appearance" style="display:none;">
                                 
                                 <div class="settings-section">
-                                    <h3>📐 Dashboard Layout Engine</h3>
-                                    <p style="opacity: 0.8; margin-bottom: 15px;">Rearrange, hide, or prioritize the widgets on your Home Hub canvas.</p>
-                                    <button class="btn" onclick="openWidgetBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;">⚙️ Enter Layout Builder</button>
+                                    <h3>📐 Customize Dashboard Layout</h3>
+                                    <p style="opacity: 0.8; margin-bottom: 15px;">Rearrange or hide widgets on your homepage screen.</p>
+                                    <button id="open-layout-builder-btn" class="btn" onclick="openWidgetBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;">⚙️ Open Layout Builder</button>
                                 </div>
 
                                 <div class="settings-section">
-                                    <h3>🎭 Theme Identity Generator</h3>
+                                    <h3>🎭 Theme Name Suggestion</h3>
                                     <div style="background: rgba(0,0,0,0.05); padding: 20px; border-radius: 20px; margin-bottom:20px;">
-                                        <p style="margin-bottom:10px; opacity:0.8;">Suggested Theme Name:</p>
+                                        <p style="margin-bottom:10px; opacity:0.8;">Theme Name:</p>
                                         <div id="theme-name-suggestion" style="font-size: 1.8em; font-weight: bold; color: var(--accent-main); margin-bottom: 15px;">"Classic Birthday Blend"</div>
-                                        <p style="font-size: 0.9em; opacity: 0.7;">This name updates in real-time based on your color selections!</p>
+                                        <p style="font-size: 0.9em; opacity: 0.7;">This name updates dynamically as you change colors!</p>
                                     </div>
                                 </div>
 
-                                <h3>Portal Theme Customizations</h3>
-                                <p style="opacity:0.8; margin-bottom:15px;">Select a preconfigured environmental color pack wrapper profile:</p>
+                                <h3>Choose a Theme Color</h3>
+                                <p style="opacity:0.8; margin-bottom:15px;">Select a color scheme for the website:</p>
                                 <div class="theme-packs-grid" id="themes-wrapper">
                                     <div class="theme-card-button" onclick="setTheme('#FAF6EF', '#5C4033')"><div class="theme-dot-preview" style="background:#FAF6EF; border-color:#5C4033"></div>Sand</div>
                                     <div class="theme-card-button" onclick="setTheme('#1A202C', '#63B3ED')"><div class="theme-dot-preview" style="background:#1A202C; border-color:#63B3ED"></div>Midnight</div>
@@ -559,27 +864,27 @@
                                     <div class="theme-card-button" onclick="setTheme('#E2E8F0', '#1C3D27')"><div class="theme-dot-preview" style="background:#E2E8F0; border-color:#1C3D27"></div>Highlands</div>
                                 </div>
 
-                                <h4 style="margin:25px 0 15px 0;">Custom Visual Construction</h4>
+                                <h4 style="margin:25px 0 15px 0;">Create Custom Theme</h4>
                                 <div style="margin-bottom: 20px;">
-                                    <button class="btn" onclick="generateRandomTheme()" style="width: 100%; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); border: none; font-size: 1.05em; padding: 15px; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">🎲 Generate Completely Random Theme</button>
+                                    <button class="btn" onclick="generateRandomTheme()" style="width: 100%; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); border: none; font-size: 1.05em; padding: 15px; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">🎲 Random Colors</button>
                                 </div>
                                 <div class="color-picker-ui">
                                     <div class="color-box" id="bg-display" onclick="document.getElementById('bg-picker').click()"></div>
                                     <input type="color" id="bg-picker" oninput="customTheme()">
-                                    <strong>Modify Portal Background Canvas</strong>
+                                    <strong>Background Color</strong>
                                 </div>
                                 <div class="color-picker-ui">
                                     <div class="color-box" id="accent-display" onclick="document.getElementById('accent-picker').click()"></div>
                                     <input type="color" id="accent-picker" oninput="customTheme()">
-                                    <strong>Modify Highlight Accent Highlight</strong>
+                                    <strong>Highlight Accent Color</strong>
                                 </div>
                                 <div style="display:flex; gap:10px; margin-top:15px; align-items:center;">
-                                    <input type="text" id="custom-theme-name" placeholder="Name custom color scheme..." style="margin-bottom:0; flex-grow:1;">
-                                    <button class="btn" onclick="saveCustomPreset()" style="font-size:0.9em; padding:12px 20px;">Save Scheme</button>
+                                    <input type="text" id="custom-theme-name" placeholder="Theme name..." style="margin-bottom:0; flex-grow:1;">
+                                    <button class="btn" onclick="saveCustomPreset()" style="font-size:0.9em; padding:12px 20px;">Save Theme</button>
                                 </div>
 
-                                <h4 style="margin:30px 0 10px 0; border-top:1px solid rgba(128,128,128,0.15); padding-top:20px;">Dynamic System Typography Suite</h4>
-                                <p style="opacity:0.8; margin-bottom:12px; font-size:0.9em;">Select from 12 customized font typography matrices:</p>
+                                <h4 style="margin:30px 0 10px 0; border-top:1px solid rgba(128,128,128,0.15); padding-top:20px;">Choose a Font</h4>
+                                <p style="opacity:0.8; margin-bottom:12px; font-size:0.9em;">Select a font for the site:</p>
                                 <select id="font-family-select" onchange="previewAndApplyFont()" style="font-weight:bold;">
                                     <optgroup label="Cozy & Rounded Formats">
                                         <option value="'Varela Round', sans-serif">🟢 Varela Round (Warm Fluid Default)</option>
@@ -611,37 +916,46 @@
                             </div>
 
                             <div class="settings-sub-pane" id="set-pane-accessibility" style="display:none;">
-                                <h3>Layout Accessibility Controls</h3>
-                                <p style="opacity:0.8; margin-bottom:15px;">Modify view scalability configurations to align with system preferences:</p>
+                                <h3>Accessibility Settings</h3>
+                                <p style="opacity:0.8; margin-bottom:15px;">Adjust settings for easier viewing:</p>
                                 <div class="toggle-row">
-                                    <span><strong>Kill Structural Ambient Physics</strong><br><small style="opacity:0.7;">Disables procedural fluid canvas floating background blobs</small></span>
+                                    <span><strong>Stop Background Animation</strong><br><small style="opacity:0.7;">Turns off the floating background circles</small></span>
                                     <label class="switch"><input type="checkbox" id="motion-toggle" onchange="toggleMotion()"><span class="slider"></span></label>
                                 </div>
                                 <div class="toggle-row">
-                                    <span><strong>Enlarged Global Text Layout Scale</strong><br><small style="opacity:0.7;">Increases text layer dimensions globally across the interface</small></span>
+                                    <span><strong>Larger Text Size</strong><br><small style="opacity:0.7;">Makes all text bigger on the website</small></span>
                                     <label class="switch"><input type="checkbox" id="font-toggle" onchange="toggleFont()"><span class="slider"></span></label>
+                                </div>
+                                <div class="toggle-row" style="margin-top: 15px;">
+                                    <span><strong>Welcome Guide</strong><br><small style="opacity:0.7;">Replay the interactive tutorial for the website</small></span>
+                                    <button class="btn" style="padding:10px 15px; font-size:0.85em;" onclick="replayTutorial()">Replay Guide</button>
                                 </div>
                             </div>
 
                             <div class="settings-sub-pane" id="set-pane-system" style="display:none;">
-                                <h3>Data Architecture Management</h3>
-                                <p style="opacity:0.8; margin-bottom:20px;">Manage cookies, cache, and state variables stored on this browser client node:</p>
+                                <h3>Reset Stored Data</h3>
+                                <p style="opacity:0.8; margin-bottom:20px;">Clear saved information on this device:</p>
                                 
                                 <div style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                        <div><strong>Reset Checklist Matrix</strong><br><small style="opacity:0.7;">Wipes your check statuses and custom todo rows.</small></div>
-                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeChecklistData()">Purge Checklist</button>
+                                        <div><strong>Reset Checklist</strong><br><small style="opacity:0.7;">Clears your checklist items.</small></div>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeChecklistData()">Reset Checklist</button>
                                     </div>
                                     
                                     <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                        <div><strong>Clear Theme Button Cache</strong><br><small style="opacity:0.7;">Deletes custom palette buttons you created.</small></div>
-                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeCustomThemesData()">Clear Buttons</button>
+                                        <div><strong>Delete Custom Themes</strong><br><small style="opacity:0.7;">Deletes the custom color schemes you saved.</small></div>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeCustomThemesData()">Delete Themes</button>
                                     </div>
 
-                                    <div style="background:rgba(217,83,79,0.05); border:1px dashed #d9534f; padding:20px; border-radius:20px; margin-top:15px;">
-                                        <h4 style="color:#d9534f; margin-bottom:5px;">⚠️ Hard Factory Cache Reset</h4>
-                                        <p style="font-size:0.85em; opacity:0.8; margin-bottom:15px;"> Wipes all data across all profiles, including Dominik's bulletins, clue updates, layout arrangements, question counters, and stored configurations. Returns the sandbox environment entirely back to day-one source metrics.</p>
-                                        <button class="btn" style="background:#d9534f; width:100%; font-size:0.9em; padding:12px;" onclick="factoryHardResetSystem()">Execute Total Node Factory Reset</button>
+                                    <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                        <div><strong>Reset My Account</strong><br><small style="opacity:0.7;">Wipes your layout, theme, checklist, status, and notes, returning your account to default settings.</small></div>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#d9534f;" onclick="resetMyAccountData()">Reset Account</button>
+                                    </div>
+
+                                    <div id="admin-factory-reset-section" style="background:rgba(217,83,79,0.05); border:1px dashed #d9534f; padding:20px; border-radius:20px; margin-top:15px; display:none;">
+                                        <h4 style="color:#d9534f; margin-bottom:5px;">⚠️ Full Reset</h4>
+                                        <p style="font-size:0.85em; opacity:0.8; margin-bottom:15px;">Wipes all saved changes on this device, including bulletins, clues, layouts, questions, and accounts. Restores the site to its original default state.</p>
+                                        <button class="btn" style="background:#d9534f; width:100%; font-size:0.9em; padding:12px;" onclick="factoryHardResetSystem()">Execute Full Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -655,6 +969,97 @@
     </div>
 
     <script>
+        // =========================================================================
+        // --- 0. FIREBASE REAL-TIME DATABASE SETUP ---
+        // =========================================================================
+        const firebaseConfig = {
+            apiKey: "",
+            authDomain: "",
+            databaseURL: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
+        };
+
+        let db = null;
+        let isFirebaseEnabled = false;
+
+        if (firebaseConfig.apiKey && firebaseConfig.databaseURL) {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                isFirebaseEnabled = true;
+                console.log("Firebase Database integration activated successfully!");
+            } catch (e) {
+                console.error("Firebase initialization failed: ", e);
+            }
+        } else {
+            console.log("Firebase is not configured. Running in Local Device Storage mode (localStorage).");
+        }
+
+        function setupFirebaseSyncListeners() {
+            if (!isFirebaseEnabled) return;
+
+            // 1. Sync Hype
+            db.ref('hype').on('value', (snapshot) => {
+                const count = snapshot.val() || 0;
+                localStorage.setItem('portalHype', count);
+                const hc = document.getElementById('hype-count');
+                if (hc) hc.innerText = count;
+                const shc = document.getElementById('stat-total-hype');
+                if (shc) shc.innerText = count;
+            });
+
+            // 2. Sync Bulletins
+            db.ref('bulletins').on('value', (snapshot) => {
+                const bulletinsMap = snapshot.val() || {};
+                const bulletinsList = Object.keys(bulletinsMap).map(key => bulletinsMap[key]);
+                bulletinsList.sort((a, b) => a.id - b.id);
+                localStorage.setItem('portalBulletins', JSON.stringify(bulletinsList));
+                if (guests[currentUsername] && guests[currentUsername].layout === 'host') {
+                    renderAdminBulletinList();
+                } else {
+                    renderGuestBulletinBoard();
+                }
+            });
+
+            // 3. Sync Questions (Q&A)
+            db.ref('questions').on('value', (snapshot) => {
+                const qaMap = snapshot.val() || {};
+                const qaList = Object.keys(qaMap).map(key => qaMap[key]);
+                qaList.sort((a, b) => a.id - b.id);
+                localStorage.setItem('portalGlobalQADataStore', JSON.stringify(qaList));
+                if (guests[currentUsername] && guests[currentUsername].layout === 'host') {
+                    renderHostDashboardData();
+                } else {
+                    renderGuestQABoard();
+                }
+            });
+
+            // 4. Sync Statuses & RSVPs
+            db.ref('statuses').on('value', (snapshot) => {
+                const statusesMap = snapshot.val() || {};
+                Object.keys(statusesMap).forEach(key => {
+                    const data = statusesMap[key];
+                    if (data.status) {
+                        localStorage.setItem(`portalStatus_${key}`, data.status);
+                    }
+                    if (data.customMsg !== undefined) {
+                        localStorage.setItem(`portalCustomStatus_${key}`, data.customMsg || "");
+                    }
+                    if (data.rsvpAnswer) {
+                        localStorage.setItem(`portalInterceptAnswerValue_${key}`, data.rsvpAnswer);
+                    }
+                });
+                renderGlobalStatusBoard();
+                renderGuestListTab();
+                if (guests[currentUsername] && guests[currentUsername].layout === 'host') {
+                    renderHostDashboardData();
+                }
+            });
+        }
+
         // =========================================================================
         // --- 1. DATA LAYER CONFIGURATIONS & DEFAULTS ---
         // =========================================================================
@@ -685,28 +1090,28 @@
         ];
 
         const guests = {
-            "dominik": { password: "dominik_party", name: "Dominik (Birthday Boy)", layout: "host" },
-            "test_guest": { password: "password123", name: "Test User Node", layout: "guest" },
-            "alpha_guest_82": { password: "bday_9281", name: "Oliwier Miskiewicz", layout: "guest" },
-            "beta_guest_45": { password: "party_3729", name: "Dawid Palka", layout: "guest" },
-            "gamma_guest_19": { password: "celebrate_6481", name: "Damian Michalak", layout: "guest" }
+            "dominik": { password: "dominik_party", name: "Dominik (Birthday Boy)", layout: "host", defaultTheme: { bg: "#3B1E54", accent: "#D0BFFF" } },
+            "test_guest": { password: "password123", name: "Test User Node", layout: "guest", defaultTheme: { bg: "#FAF6EF", accent: "#5C4033" } },
+            "alpha_guest_82": { password: "bday_9281", name: "Oliwier Miskiewicz", layout: "guest", defaultTheme: { bg: "#1A202C", accent: "#63B3ED" } },
+            "beta_guest_45": { password: "party_3729", name: "Dawid Palka", layout: "guest", defaultTheme: { bg: "#F0FFF4", accent: "#2F855A" } },
+            "gamma_guest_19": { password: "celebrate_6481", name: "Damian Michalak", layout: "guest", defaultTheme: { bg: "#2D1B2E", accent: "#E9B5D8" } }
         };
 
         // --- DYNAMIC WIDGET LAYOUT DEFAULTS ---
         const defaultGuestWidgets = [
-            { id: 'widget-countdown', title: 'Countdown Timer', fullWidth: true },
-            { id: 'widget-marquee', title: 'Present Ideas Ribbon', fullWidth: true },
-            { id: 'widget-rsvp', title: 'RSVP Contacts' },
-            { id: 'widget-status', title: 'Update Your Status' },
-            { id: 'widget-mission', title: 'Secret Icebreaker Mission' },
-            { id: 'widget-qa', title: 'Questions for Dom' },
-            { id: 'widget-attendance', title: 'Guest Attendance Board' },
-            { id: 'widget-checklist', title: 'Custom Checklist' },
-            { id: 'widget-notes', title: 'Notes to Self' },
-            { id: 'widget-bulletin', title: 'Bulletin Board' },
-            { id: 'widget-hype', title: 'Party Hype Metric' },
-            { id: 'widget-location', title: 'Location & Weather Info', fullWidth: true }
-        ].map(w => ({...w, active: true}));
+            { id: 'widget-countdown', title: 'Countdown Timer', fullWidth: true, active: true },
+            { id: 'widget-marquee', title: 'Present Ideas Ribbon', fullWidth: true, active: true },
+            { id: 'widget-rsvp', title: 'RSVP Contacts', active: false },
+            { id: 'widget-status', title: 'Update Your Status', active: false },
+            { id: 'widget-mission', title: 'Secret Icebreaker Mission', active: false },
+            { id: 'widget-qa', title: 'Questions for Dom', active: false },
+            { id: 'widget-attendance', title: 'Guest Attendance Board', active: false },
+            { id: 'widget-checklist', title: 'Custom Checklist', active: false },
+            { id: 'widget-notes', title: 'Notes to Self', active: false },
+            { id: 'widget-bulletin', title: 'Bulletin Board', active: false },
+            { id: 'widget-hype', title: 'Party Hype Metric', active: false },
+            { id: 'widget-location', title: 'Location & Weather Info', fullWidth: true, active: true }
+        ];
 
         const defaultHostWidgets = [
             { id: 'widget-host-stats', title: 'Host Control Console Overview', fullWidth: true },
@@ -746,12 +1151,19 @@
 
             if(guests[u] && guests[u].password === p) {
                 currentUsername = u;
+                localStorage.setItem('portalRememberedUser', currentUsername);
                 document.getElementById('login-view').style.display = 'none';
                 
                 // Populate profile tab
                 document.getElementById('prof-display-name').innerText = guests[currentUsername].name;
                 document.getElementById('prof-display-user').innerText = `@${currentUsername}`;
-                document.getElementById('prof-display-role').innerText = guests[currentUsername].layout === 'host' ? "Administrative Host / Architect" : "VIP Invitee Profile Card";
+                document.getElementById('prof-display-role').innerText = guests[currentUsername].layout === 'host' ? "Host / Organizer" : "Guest";
+
+                // Manage admin factory reset visibility
+                document.getElementById('admin-factory-reset-section').style.display = (guests[currentUsername].layout === 'host') ? 'block' : 'none';
+
+                // Load user-specific theme colors
+                applyUserTheme(currentUsername);
 
                 if (guests[currentUsername].layout === "host") {
                     launchDashboardSystem();
@@ -765,16 +1177,83 @@
             }
         }
 
+        function checkRememberedUser() {
+            const remembered = localStorage.getItem('portalRememberedUser');
+            if (remembered && guests[remembered]) {
+                document.getElementById('standard-login-fields').style.display = 'none';
+                document.getElementById('quick-login-container').style.display = 'block';
+                const guestName = guests[remembered].name.split(' ')[0];
+                document.getElementById('quick-login-btn').innerText = `Continue as ${guestName} 🎉`;
+                document.getElementById('login-instruction').innerText = "Quick Log In";
+                applyUserTheme(remembered);
+            } else {
+                showStandardLogin();
+            }
+        }
+
+        function showStandardLogin() {
+            document.getElementById('standard-login-fields').style.display = 'block';
+            document.getElementById('quick-login-container').style.display = 'none';
+            document.getElementById('login-instruction').innerText = "Enter your invite details";
+        }
+
+        function quickLogin() {
+            const remembered = localStorage.getItem('portalRememberedUser');
+            if (remembered && guests[remembered]) {
+                currentUsername = remembered;
+                document.getElementById('login-view').style.display = 'none';
+                
+                // Populate profile tab
+                document.getElementById('prof-display-name').innerText = guests[currentUsername].name;
+                document.getElementById('prof-display-user').innerText = `@${currentUsername}`;
+                document.getElementById('prof-display-role').innerText = guests[currentUsername].layout === 'host' ? "Host / Organizer" : "Guest";
+
+                // Manage admin factory reset visibility
+                document.getElementById('admin-factory-reset-section').style.display = (guests[currentUsername].layout === 'host') ? 'block' : 'none';
+
+                // Load user-specific theme colors
+                applyUserTheme(currentUsername);
+
+                if (guests[currentUsername].layout === "host") {
+                    launchDashboardSystem();
+                } else {
+                    const answered = localStorage.getItem(`portalInterceptAnswered_${currentUsername}`);
+                    answered ? launchDashboardSystem() : document.getElementById('rsvp-intercept-view').style.display = 'flex';
+                }
+            }
+        }
+
+        function applyUserTheme(username) {
+            const userTheme = JSON.parse(localStorage.getItem(`portalTheme_${username}`));
+            if (userTheme) {
+                setTheme(userTheme.bg, userTheme.accent);
+            } else if (guests[username] && guests[username].defaultTheme) {
+                setTheme(guests[username].defaultTheme.bg, guests[username].defaultTheme.accent);
+            } else {
+                setTheme('#FAF6EF', '#5C4033'); // Default Sand theme
+            }
+        }
+
         // =========================================================================
         // --- VIDEO OVERLAY & RSVP LOGIC ---
         // =========================================================================
         function submitInterceptRSVP(answer) {
             localStorage.setItem(`portalInterceptAnswered_${currentUsername}`, "true");
             localStorage.setItem(`portalInterceptAnswerValue_${currentUsername}`, answer);
+            
+            if (isFirebaseEnabled) {
+                db.ref(`statuses/${currentUsername}`).update({
+                    name: guests[currentUsername].name,
+                    rsvpAnswer: answer
+                });
+            }
+            
             document.getElementById('rsvp-intercept-view').style.display = 'none';
             
             // If they said yes, show the video overlay
             if (answer.includes('Yes')) {
+                const vid = document.getElementById('welcome-video');
+                vid.src = "https://www.youtube.com/embed/ub78jssgZNM?autoplay=1";
                 document.getElementById('video-overlay-view').style.display = 'flex';
             } else {
                 // If they said no, just go straight to the portal
@@ -784,10 +1263,7 @@
 
         function finishVideo() {
             const vid = document.getElementById('welcome-video');
-            // Reset the iframe src to stop the YouTube video from playing in the background
-            const currentSrc = vid.src;
-            vid.src = '';
-            vid.src = currentSrc;
+            vid.src = ''; // Completely stop video playback
 
             document.getElementById('video-overlay-view').style.display = 'none';
             
@@ -812,6 +1288,10 @@
             document.getElementById('dashboard-view').style.display = 'flex';
             const isHost = guests[currentUsername].layout === "host";
             
+            if (isFirebaseEnabled) {
+                setupFirebaseSyncListeners();
+            }
+            
             document.getElementById('greeting').innerText = isHost ? `Hello Dominik! Welcome to your Admin Hub.` : `Welcome, ${guests[currentUsername].name.split(' ')[0]}!`;
             
             // Layout Architecture Base
@@ -825,7 +1305,9 @@
                 currentWidgetOrder = JSON.parse(JSON.stringify(baseArray)); 
             }
 
-            renderDashboardGrid();
+            // Restore layout mode (Grid vs Focus)
+            const savedMode = localStorage.getItem(`portalLayoutMode_${currentUsername}`) || 'grid';
+            switchLayoutMode(savedMode);
 
             // Init Data
             if (isHost) {
@@ -835,6 +1317,12 @@
                 initGuestDashboardWidgets();
             }
             commonGlobalChronos();
+
+            // Run first-time guest tutorial
+            const tutorialCompleted = localStorage.getItem(`portalTutorialCompleted_${currentUsername}`);
+            if (!tutorialCompleted && !isHost) {
+                startTutorial();
+            }
         }
 
         function renderDashboardGrid() {
@@ -861,6 +1349,11 @@
         let draggedIndex = -1;
 
         function openWidgetBuilder() {
+            if (currentLayoutMode === "focus") {
+                switchLayoutMode("grid");
+                currentLayoutMode = "focus"; // keep focus state preserved
+            }
+
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('widget-builder-view').style.display = 'flex';
             
@@ -924,16 +1417,31 @@
             
             document.getElementById('widget-builder-view').style.display = 'none';
             document.getElementById('dashboard-view').style.display = 'flex';
+
+            // Re-apply layout mode (Grid vs Focus)
+            const savedMode = localStorage.getItem(`portalLayoutMode_${currentUsername}`) || 'grid';
+            switchLayoutMode(savedMode);
         }
 
         // =========================================================================
         // --- 5. SETTINGS NAVIGATION ---
         // =========================================================================
-        function showTab(tabId) {
+        function showTab(tabId, event) {
             document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).style.display = 'block';
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            } else {
+                let btnIndex = 0;
+                if (tabId === 'attendance-dash') btnIndex = 1;
+                else if (tabId === 'settings-dash') btnIndex = 2;
+                const btn = document.querySelectorAll('.nav-tabs .tab-btn')[btnIndex];
+                if (btn) btn.classList.add('active');
+            }
+            if (tabId === 'attendance-dash') {
+                renderGuestListTab();
+            }
         }
 
         function showSettingsSubTab(subTabId) {
@@ -991,7 +1499,11 @@
                 document.documentElement.style.setProperty('--text-adaptive', '#3E2723');
                 document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
             }
-            localStorage.setItem('portalTheme', JSON.stringify({bg, accent}));
+            if (currentUsername) {
+                localStorage.setItem(`portalTheme_${currentUsername}`, JSON.stringify({bg, accent}));
+            } else {
+                localStorage.setItem('portalTheme', JSON.stringify({bg, accent}));
+            }
             
             const sug = document.getElementById('theme-name-suggestion');
             if(sug) sug.innerText = `"${analyzeThemeName(bg, accent)}"`;
@@ -1088,6 +1600,31 @@
             renderCustomPresetButtons();
         }
 
+        function resetMyAccountData() {
+            if (confirm("Are you sure you want to completely restart your account to default? This will wipe your visual themes, layout order, checklist items, status updates, and custom notes on this device.")) {
+                localStorage.removeItem(`portalTheme_${currentUsername}`);
+                localStorage.removeItem(`portalWidgetOrder_${currentUsername}`);
+                localStorage.removeItem(`portalLayoutMode_${currentUsername}`);
+                localStorage.removeItem(`portalStatus_${currentUsername}`);
+                localStorage.removeItem(`portalCustomStatus_${currentUsername}`);
+                localStorage.removeItem(`portalTodoCustom_${currentUsername}`);
+                localStorage.removeItem(`portalTodoChecked_${currentUsername}`);
+                localStorage.removeItem(`portalNotes_${currentUsername}`);
+                localStorage.removeItem(`portalTutorialCompleted_${currentUsername}`);
+                localStorage.removeItem(`portalInterceptAnswered_${currentUsername}`);
+                localStorage.removeItem(`portalInterceptAnswerValue_${currentUsername}`);
+                localStorage.removeItem(`portalMissionAssignment_${currentUsername}`);
+                localStorage.removeItem(`portalTimer_${currentUsername}`);
+                
+                if (currentUsername === 'dominik') {
+                    localStorage.removeItem('portalStatus_dominik');
+                }
+                
+                alert("Your account has been reset to defaults. Reloading page.");
+                location.reload();
+            }
+        }
+
         function factoryHardResetSystem() {
             if(confirm("CRITICAL WARNING: This executes a hard purge of the local cache database. Bulletins, clues, layouts, Q&As, and guest options will be permanently wiped back to installation default values. Proceed?")) {
                 localStorage.clear();
@@ -1130,11 +1667,17 @@
         function submitGuestQuestion() {
             const input = document.getElementById('guest-question-input'), qText = input.value.trim();
             if(!qText) return;
-            const globalQAData = JSON.parse(localStorage.getItem('portalGlobalQADataStore') || '[]');
-            globalQAData.push({ id: Date.now(), sender: currentUsername, senderName: guests[currentUsername].name.split(' ')[0], question: qText, answer: null });
-            localStorage.setItem('portalGlobalQADataStore', JSON.stringify(globalQAData));
+            const newId = String(Date.now());
+            const qObj = { id: Number(newId), sender: currentUsername, senderName: guests[currentUsername].name.split(' ')[0], question: qText, answer: null };
+            if (isFirebaseEnabled) {
+                db.ref(`questions/${newId}`).set(qObj);
+            } else {
+                const globalQAData = JSON.parse(localStorage.getItem('portalGlobalQADataStore') || '[]');
+                globalQAData.push(qObj);
+                localStorage.setItem('portalGlobalQADataStore', JSON.stringify(globalQAData));
+                renderGuestQABoard();
+            }
             input.value = "";
-            renderGuestQABoard();
         }
 
         function renderGuestQABoard() {
@@ -1160,22 +1703,61 @@
 
         function submitHostAnswer(qId) {
             const input = document.getElementById(`host-answer-input-${qId}`), aText = input.value.trim(); if(!aText) return;
-            let globalQAData = JSON.parse(localStorage.getItem('portalGlobalQADataStore') || '[]');
-            globalQAData = globalQAData.map(item => { if(item.id === qId) { item.answer = aText; } return item; });
-            localStorage.setItem('portalGlobalQADataStore', JSON.stringify(globalQAData));
-            renderHostDashboardData(); 
+            if (isFirebaseEnabled) {
+                db.ref(`questions/${qId}`).update({ answer: aText });
+            } else {
+                let globalQAData = JSON.parse(localStorage.getItem('portalGlobalQADataStore') || '[]');
+                globalQAData = globalQAData.map(item => { if(item.id === qId) { item.answer = aText; } return item; });
+                localStorage.setItem('portalGlobalQADataStore', JSON.stringify(globalQAData));
+                renderHostDashboardData(); 
+            }
         }
 
         // --- STATUS & MANIFESTS ---
         function updateMyGlobalStatus() {
-            localStorage.setItem(`portalStatus_${currentUsername}`, document.getElementById('status-select').value);
-            renderGlobalStatusBoard(); 
+            const statusVal = document.getElementById('status-select').value;
+            localStorage.setItem(`portalStatus_${currentUsername}`, statusVal);
+            if (isFirebaseEnabled) {
+                db.ref(`statuses/${currentUsername}`).update({
+                    name: guests[currentUsername].name,
+                    status: statusVal
+                });
+            } else {
+                renderGlobalStatusBoard(); 
+            }
+        }
+
+        function saveCustomStatus() {
+            const input = document.getElementById('status-custom-input');
+            if (!input) return;
+            const msg = input.value.trim();
+            localStorage.setItem(`portalCustomStatus_${currentUsername}`, msg);
+            if (isFirebaseEnabled) {
+                db.ref(`statuses/${currentUsername}`).update({
+                    name: guests[currentUsername].name,
+                    customMsg: msg
+                });
+            } else {
+                renderGlobalStatusBoard();
+                renderGuestListTab();
+            }
+            alert("Custom status bubble updated! Check the 'Who's Coming' tab.");
         }
 
         function saveDomStatus() {
-            localStorage.setItem('portalStatus_dominik', document.getElementById('dom-status-input').value.trim() || "expecting you there on the day");
-            alert("Your active host banner announcement has been pushed to the boards.");
-            renderGlobalStatusBoard();
+            const statusVal = document.getElementById('dom-status-input').value.trim() || "expecting you there on the day";
+            localStorage.setItem('portalStatus_dominik', statusVal);
+            if (isFirebaseEnabled) {
+                db.ref('statuses/dominik').update({
+                    name: guests['dominik'].name,
+                    status: statusVal,
+                    customMsg: statusVal
+                });
+            } else {
+                alert("Your active host banner announcement has been pushed to the boards.");
+                renderGlobalStatusBoard();
+                renderGuestListTab();
+            }
         }
 
         function renderGlobalStatusBoard() {
@@ -1201,6 +1783,114 @@
             });
         }
 
+        function renderGuestListTab() {
+            let yes = 0, no = 0, pending = 0;
+            Object.keys(guests).forEach(key => {
+                if (key === "test_guest") return;
+                if (key === "dominik") {
+                    yes++;
+                    return;
+                }
+                const answer = localStorage.getItem(`portalInterceptAnswerValue_${key}`);
+                if (answer) {
+                    if (answer.includes("Yes")) yes++;
+                    else no++;
+                } else {
+                    pending++;
+                }
+            });
+
+            const yesEl = document.getElementById('guest-stat-yes');
+            const noEl = document.getElementById('guest-stat-no');
+            const pendingEl = document.getElementById('guest-stat-pending');
+            if (yesEl) yesEl.innerText = yes;
+            if (noEl) noEl.innerText = no;
+            if (pendingEl) pendingEl.innerText = pending;
+
+            const grid = document.getElementById('guest-list-grid');
+            if (!grid) return;
+            grid.innerHTML = "";
+
+            Object.keys(guests).forEach(key => {
+                if (key === "test_guest") return;
+                const profile = guests[key];
+                const isHost = key === "dominik";
+                
+                let bg = profile.defaultTheme.bg;
+                let accent = profile.defaultTheme.accent;
+                const userTheme = JSON.parse(localStorage.getItem(`portalTheme_${key}`));
+                if (userTheme) {
+                    bg = userTheme.bg;
+                    accent = userTheme.accent;
+                }
+                
+                let rsvpLabel = "⏳ Pending Reply";
+                let rsvpColor = "#ffffff";
+                let rsvpBg = "rgba(128,128,128,0.5)";
+                
+                if (isHost) {
+                    rsvpLabel = "👑 Host / Attending";
+                    rsvpColor = "#ffffff";
+                    rsvpBg = "var(--accent-main)";
+                } else {
+                    const answer = localStorage.getItem(`portalInterceptAnswerValue_${key}`);
+                    if (answer) {
+                        if (answer.includes("Yes")) {
+                            rsvpLabel = "✓ Attending";
+                            rsvpColor = "#ffffff";
+                            rsvpBg = "#2F855A";
+                        } else {
+                            rsvpLabel = "✕ Cannot Make It";
+                            rsvpColor = "#ffffff";
+                            rsvpBg = "#d9534f";
+                        }
+                    }
+                }
+                
+                let currentStatus = "🏠 Sitting at home";
+                let customMsg = "";
+                if (isHost) {
+                    currentStatus = localStorage.getItem('portalStatus_dominik') || "expecting you there on the day";
+                    customMsg = currentStatus;
+                } else {
+                    currentStatus = localStorage.getItem(`portalStatus_${key}`) || "🏠 Sitting at home";
+                    customMsg = localStorage.getItem(`portalCustomStatus_${key}`) || "";
+                }
+                
+                const showBubble = customMsg.trim().length > 0;
+                const bubbleHtml = showBubble ? `
+                    <div class="speech-bubble" style="margin-bottom: 15px; width: 100%;">
+                        "${customMsg}"
+                    </div>
+                ` : "";
+                
+                const namePart = profile.name.split(' ')[0];
+                const initial = namePart.charAt(0);
+                const avatarTxtColor = getContrast(bg) === 'dark' ? '#ffffff' : '#3E2723';
+                
+                const cardHtml = `
+                    <div class="widget-card" style="margin-bottom: 0; padding: 25px; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius: var(--radius); transition: var(--transition);">
+                        ${bubbleHtml}
+                        <div style="width: 70px; height: 70px; border-radius: 50%; background: ${bg}; border: 3px solid ${accent}; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); color: ${avatarTxtColor}; font-size: 1.8em; font-weight: bold;">
+                            ${initial}
+                        </div>
+                        <h4 style="margin-bottom: 5px; font-size: 1.2em; color: var(--text-adaptive);">${profile.name}</h4>
+                        <p style="font-size: 0.85em; opacity: 0.7; margin-bottom: 15px; color: var(--text-adaptive);">@${key}</p>
+                        
+                        <span style="font-size: 0.85em; font-weight: bold; padding: 6px 16px; border-radius: 20px; color: ${rsvpColor}; background: ${rsvpBg}; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            ${rsvpLabel}
+                        </span>
+                        
+                        <div style="width: 100%; border-top: 1px solid rgba(128,128,128,0.15); padding-top: 15px; margin-top: auto;">
+                            <span style="font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.5; font-weight: bold; display: block; margin-bottom: 5px; color: var(--text-adaptive);">Current Status</span>
+                            <p style="font-size: 0.95em; font-weight: bold; color: var(--accent-main); line-height: 1.3;">${currentStatus}</p>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
         // --- ADMINISTRATIVE CMS ROUTINES ---
         function renderAdminBulletinList() {
             const container = document.getElementById('admin-bulletin-list'); if(!container) return; container.innerHTML = "";
@@ -1210,11 +1900,22 @@
         }
         function addAdminBulletin() {
             const d = document.getElementById('new-bulletin-date'), t = document.getElementById('new-bulletin-text'), dv = d.value.trim(), tv = t.value.trim(); if(!dv || !tv) return;
-            const b = getBulletins(); b.push({ id: Date.now(), date: dv, text: tv }); localStorage.setItem('portalBulletins', JSON.stringify(b));
-            d.value = ""; t.value = ""; renderAdminBulletinList();
+            const newId = String(Date.now());
+            const newBulletin = { id: Number(newId), date: dv, text: tv };
+            if (isFirebaseEnabled) {
+                db.ref(`bulletins/${newId}`).set(newBulletin);
+            } else {
+                const b = getBulletins(); b.push(newBulletin); localStorage.setItem('portalBulletins', JSON.stringify(b));
+                renderAdminBulletinList();
+            }
+            d.value = ""; t.value = "";
         }
         function deleteAdminBulletin(id) {
-            localStorage.setItem('portalBulletins', JSON.stringify(getBulletins().filter(b => b.id !== id))); renderAdminBulletinList();
+            if (isFirebaseEnabled) {
+                db.ref(`bulletins/${id}`).remove();
+            } else {
+                localStorage.setItem('portalBulletins', JSON.stringify(getBulletins().filter(b => b.id !== id))); renderAdminBulletinList();
+            }
         }
         function renderAdminCluesList() {
             const container = document.getElementById('admin-clues-list'); if(!container) return; container.innerHTML = "";
@@ -1331,8 +2032,19 @@
         }
 
         function addHype() {
-            let count = parseInt(localStorage.getItem('portalHype') || '0') + 1; localStorage.setItem('portalHype', count);
-            const hc = document.getElementById('hype-count'); hc.innerText = count; hc.style.transform = 'scale(1.2)'; setTimeout(() => { hc.style.transform = 'scale(1)'; }, 150);
+            if (isFirebaseEnabled) {
+                db.ref('hype').transaction((currentValue) => {
+                    return (currentValue || 0) + 1;
+                });
+                const hc = document.getElementById('hype-count');
+                if (hc) {
+                    hc.style.transform = 'scale(1.2)';
+                    setTimeout(() => { hc.style.transform = 'scale(1)'; }, 150);
+                }
+            } else {
+                let count = parseInt(localStorage.getItem('portalHype') || '0') + 1; localStorage.setItem('portalHype', count);
+                const hc = document.getElementById('hype-count'); hc.innerText = count; hc.style.transform = 'scale(1.2)'; setTimeout(() => { hc.style.transform = 'scale(1)'; }, 150);
+            }
         }
 
         // --- CYCLIC DISCORD USER SYSTEM INPUT SUGGESTIONS ---
@@ -1344,16 +2056,304 @@
         }
 
         // =========================================================================
+        // --- LAYOUT SWITCHING & FOCUS VIEW ENGINE ---
+        // =========================================================================
+        let currentLayoutMode = "grid";
+        let selectedFocusWidgetId = "";
+
+        function switchLayoutMode(mode) {
+            currentLayoutMode = mode;
+            localStorage.setItem(`portalLayoutMode_${currentUsername}`, mode);
+
+            const gridBtn = document.getElementById('layout-grid-btn');
+            const focusBtn = document.getElementById('layout-focus-btn');
+            
+            if (mode === "grid") {
+                gridBtn.style.background = "var(--accent-main)";
+                gridBtn.style.color = "#ffffff";
+                gridBtn.style.border = "none";
+                gridBtn.style.boxShadow = "0 4px 15px rgba(0,0,0,0.1)";
+
+                focusBtn.style.background = "rgba(0,0,0,0.05)";
+                focusBtn.style.color = "var(--text-adaptive)";
+                focusBtn.style.border = "1px solid rgba(0,0,0,0.1)";
+                focusBtn.style.boxShadow = "none";
+
+                // Move selected widget back to grid if there is one
+                if (selectedFocusWidgetId) {
+                    const el = document.getElementById(selectedFocusWidgetId);
+                    if (el) {
+                        document.getElementById('main-widget-grid').appendChild(el);
+                    }
+                }
+
+                document.getElementById('main-widget-grid').style.display = 'block';
+                document.getElementById('focus-layout-container').style.display = 'none';
+                renderDashboardGrid();
+            } else {
+                focusBtn.style.background = "var(--accent-main)";
+                focusBtn.style.color = "#ffffff";
+                focusBtn.style.border = "none";
+                focusBtn.style.boxShadow = "0 4px 15px rgba(0,0,0,0.1)";
+
+                gridBtn.style.background = "rgba(0,0,0,0.05)";
+                gridBtn.style.color = "var(--text-adaptive)";
+                gridBtn.style.border = "1px solid rgba(0,0,0,0.1)";
+                gridBtn.style.boxShadow = "none";
+
+                document.getElementById('main-widget-grid').style.display = 'none';
+                document.getElementById('focus-layout-container').style.display = 'flex';
+
+                renderFocusSidebar();
+            }
+        }
+
+        function renderFocusSidebar() {
+            const sidebar = document.getElementById('focus-sidebar');
+            sidebar.innerHTML = '';
+            
+            const activeWidgets = currentWidgetOrder.filter(w => w.active);
+            
+            if (activeWidgets.length === 0) {
+                sidebar.innerHTML = '<p style="font-size: 0.9em; opacity: 0.7; text-align: center; padding: 20px 0;">No active widgets. Go to Settings -> Customize Dashboard Layout to turn on widgets!</p>';
+                document.getElementById('focus-content-area').innerHTML = '';
+                return;
+            }
+
+            activeWidgets.forEach(w => {
+                const btn = document.createElement('button');
+                btn.className = 'sidebar-tab-btn';
+                btn.id = `tab-btn-${w.id}`;
+                btn.innerText = w.title;
+                btn.onclick = () => selectFocusWidget(w.id);
+                sidebar.appendChild(btn);
+            });
+
+            // Restore selection or default to first
+            if (selectedFocusWidgetId && activeWidgets.some(w => w.id === selectedFocusWidgetId)) {
+                selectFocusWidget(selectedFocusWidgetId);
+            } else {
+                selectFocusWidget(activeWidgets[0].id);
+            }
+        }
+
+        function selectFocusWidget(widgetId) {
+            // Remove active classes
+            document.querySelectorAll('#focus-sidebar .sidebar-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Set active class on selected button
+            const activeBtn = document.getElementById(`tab-btn-${widgetId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+
+            // Move previous widget back to grid
+            if (selectedFocusWidgetId && selectedFocusWidgetId !== widgetId) {
+                const prevEl = document.getElementById(selectedFocusWidgetId);
+                if (prevEl) {
+                    prevEl.style.display = 'none';
+                    document.getElementById('main-widget-grid').appendChild(prevEl);
+                }
+            }
+
+            // Move selected widget into content area
+            const el = document.getElementById(widgetId);
+            if (el) {
+                el.style.display = 'block';
+                document.getElementById('focus-content-area').appendChild(el);
+            }
+            selectedFocusWidgetId = widgetId;
+        }
+
+        // =========================================================================
+        // --- LOGIN TUTORIAL OVERLAY ENGINE ---
+        // =========================================================================
+        function startTutorial() {
+            document.body.classList.add('tutorial-running');
+            document.getElementById('tutorial-overlay').style.display = 'block';
+            document.getElementById('tutorial-card-container').style.display = 'block';
+            nextTutorialStep(1);
+        }
+
+        function nextTutorialStep(step) {
+            // Remove previous highlights, parent elevations, and click listeners
+            document.querySelectorAll('.tutorial-highlight').forEach(el => {
+                el.classList.remove('tutorial-highlight');
+            });
+            document.querySelectorAll('.tutorial-parent-elevated').forEach(el => {
+                el.classList.remove('tutorial-parent-elevated');
+                el.style.zIndex = '';
+            });
+            if (window.activeTutorialTargetEl && window.activeTutorialClickListener) {
+                window.activeTutorialTargetEl.removeEventListener('click', window.activeTutorialClickListener);
+                window.activeTutorialTargetEl = null;
+                window.activeTutorialClickListener = null;
+            }
+
+            // Ensure correct tab content is visible for settings steps
+            if (step === 6) {
+                // Open settings appearance tab automatically to point to the builder button
+                const settingsBtn = document.querySelectorAll('.nav-tabs .tab-btn')[2];
+                if (settingsBtn) {
+                    settingsBtn.click();
+                }
+                showSettingsSubTab('appearance');
+            } else {
+                // Make sure we are back on main dashboard layout
+                showTab('main-dash');
+            }
+
+            // Hide/Show steps
+            for (let i = 1; i <= 6; i++) {
+                const el = document.getElementById(`tutorial-step-${i}`);
+                if (el) el.style.display = (i === step) ? 'block' : 'none';
+            }
+
+            // Wait a split second for DOM layout to settle, then position modal next to target element
+            setTimeout(() => {
+                let targetEl = null;
+                if (step === 2) {
+                    targetEl = document.getElementById('layout-toggle-container');
+                } else if (step === 3) {
+                    targetEl = document.querySelectorAll('.nav-tabs .tab-btn')[1]; // Who's Coming tab
+                } else if (step === 4) {
+                    targetEl = document.getElementById('location-route-btn'); // Location maps button
+                } else if (step === 5) {
+                    targetEl = document.querySelectorAll('.nav-tabs .tab-btn')[2]; // Settings tab button
+                } else if (step === 6) {
+                    targetEl = document.getElementById('open-layout-builder-btn'); // Open Layout Builder btn
+                }
+
+                if (targetEl) {
+                    targetEl.classList.add('tutorial-highlight');
+                    
+                    // Elevate parent stacking contexts so they draw above the dark backdrop
+                    let parent = targetEl.parentElement;
+                    while (parent && parent !== document.body) {
+                        const style = window.getComputedStyle(parent);
+                        if (style.position !== 'static' || style.display === 'flex' || style.display === 'grid') {
+                            parent.classList.add('tutorial-parent-elevated');
+                            parent.style.zIndex = '10002';
+                        }
+                        parent = parent.parentElement;
+                    }
+                    
+                    positionTutorialBox(targetEl);
+
+                    // Add click listener to auto-advance step when demonstrated button is clicked
+                    window.activeTutorialTargetEl = targetEl;
+                    window.activeTutorialClickListener = function() {
+                        setTimeout(() => {
+                            if (step === 6) {
+                                completeTutorial();
+                            } else {
+                                nextTutorialStep(step + 1);
+                            }
+                        }, 250);
+                    };
+                    targetEl.addEventListener('click', window.activeTutorialClickListener);
+                } else {
+                    positionTutorialBox(null);
+                }
+            }, 150);
+        }
+
+        function positionTutorialBox(targetEl) {
+            const cardContainer = document.getElementById('tutorial-card-container');
+            const card = cardContainer.querySelector('.card');
+            const arrow = document.getElementById('tutorial-arrow');
+            
+            if (!targetEl) {
+                // Center on screen using fixed viewport coordinates
+                cardContainer.style.position = 'fixed';
+                cardContainer.style.top = '50%';
+                cardContainer.style.left = '50%';
+                cardContainer.style.transform = 'translate(-50%, -50%)';
+                cardContainer.style.margin = '0';
+                if (arrow) arrow.style.display = 'none';
+                return;
+            }
+
+            // Get target position
+            const rect = targetEl.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            
+            cardContainer.style.position = 'absolute';
+            
+            // Position below target, centered horizontally relative to target
+            const targetCenter = rect.left + rect.width / 2;
+            const cardWidth = card.offsetWidth || 500;
+            
+            let top = rect.bottom + 15;
+            let left = targetCenter - cardWidth / 2;
+            
+            // Keep on screen
+            if (left < 10) left = 10;
+            if (left + cardWidth > window.innerWidth) {
+                left = window.innerWidth - cardWidth - 10;
+            }
+            
+            cardContainer.style.top = `${top + scrollTop}px`;
+            cardContainer.style.left = `${left + scrollLeft}px`;
+            cardContainer.style.transform = 'none';
+            cardContainer.style.margin = '0';
+            
+            // Scroll target into view smoothly
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            // Calculate arrow position relative to the card to point directly at the target center
+            if (arrow) {
+                const arrowLeft = targetCenter - left;
+                arrow.style.left = `${arrowLeft}px`;
+                arrow.style.display = 'block';
+            }
+        }
+
+        function completeTutorial() {
+            // Remove any highlights, parent elevations, and click listeners
+            document.querySelectorAll('.tutorial-highlight').forEach(el => {
+                el.classList.remove('tutorial-highlight');
+            });
+            document.querySelectorAll('.tutorial-parent-elevated').forEach(el => {
+                el.classList.remove('tutorial-parent-elevated');
+                el.style.zIndex = '';
+            });
+            if (window.activeTutorialTargetEl && window.activeTutorialClickListener) {
+                window.activeTutorialTargetEl.removeEventListener('click', window.activeTutorialClickListener);
+                window.activeTutorialTargetEl = null;
+                window.activeTutorialClickListener = null;
+            }
+            document.body.classList.remove('tutorial-running');
+            document.getElementById('tutorial-overlay').style.display = 'none';
+            document.getElementById('tutorial-card-container').style.display = 'none';
+            localStorage.setItem(`portalTutorialCompleted_${currentUsername}`, 'true');
+            // Go back to Home
+            showTab('main-dash');
+        }
+
+        function replayTutorial() {
+            startTutorial();
+        }
+
+        // =========================================================================
         // --- 8. SYSTEM START BOOT ENGINES ---
         // =========================================================================
         window.onload = () => {
-            const sTheme = JSON.parse(localStorage.getItem('portalTheme')); 
+            checkRememberedUser();
+
+            const remembered = localStorage.getItem('portalRememberedUser');
+            const themeKey = remembered ? `portalTheme_${remembered}` : 'portalTheme';
+            const sTheme = JSON.parse(localStorage.getItem(themeKey)); 
             
-            // Render stored theme logic
             if (sTheme) {
                 setTheme(sTheme.bg, sTheme.accent);
                 const themeSug = document.getElementById('theme-name-suggestion');
                 if (themeSug) { themeSug.innerText = `"${analyzeThemeName(sTheme.bg, sTheme.accent)}"`; }
+            } else if (remembered && guests[remembered] && guests[remembered].defaultTheme) {
+                setTheme(guests[remembered].defaultTheme.bg, guests[remembered].defaultTheme.accent);
             } else {
                 setTheme('#FAF6EF', '#5C4033');
             }
@@ -1375,6 +2375,13 @@
             loadNotes(); loadChecklist(); initConveyorBelt(); renderGlobalStatusBoard(); renderGuestQABoard(); renderGuestBulletinBoard(); renderMissionWidget();
             const myStatus = localStorage.getItem(`portalStatus_${currentUsername}`) || "🏠 Sitting at home";
             document.getElementById('status-select').value = myStatus; document.getElementById('hype-count').innerText = localStorage.getItem('portalHype') || '0';
+            
+            const customStatusInput = document.getElementById('status-custom-input');
+            if (customStatusInput) {
+                customStatusInput.value = localStorage.getItem(`portalCustomStatus_${currentUsername}`) || "";
+                customStatusInput.addEventListener('keypress', e => { if (e.key === 'Enter') saveCustomStatus(); });
+            }
+            
             setInterval(cyclePlaceholder, 4000);
             document.getElementById('note-input').addEventListener('keypress', e => { if (e.key === 'Enter') saveNote(); });
             document.getElementById('todo-input').addEventListener('keypress', e => { if (e.key === 'Enter') addCheckItem(); });
@@ -1399,5 +2406,74 @@
             }, 1000);
         }
     </script>
+
+    <!-- Login Tutorial Overlay Background Mask -->
+    <div id="tutorial-overlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; min-height: 100%; background: rgba(0,0,0,0.15); z-index: 10000; transition: background 0.3s ease;"></div>
+
+    <!-- Login Tutorial Card Container (Top Layer) -->
+    <div id="tutorial-card-container" style="display: none; position: absolute; z-index: 10010; pointer-events: none;">
+        <div class="card" style="width: 500px; max-width: 90vw; padding: 40px; text-align: center; position: relative; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: 0 20px 50px rgba(0,0,0,0.15), 0 5px 15px rgba(0,0,0,0.08); border: 2px solid var(--accent-main); background: var(--bg-main) !important; color: var(--text-adaptive); pointer-events: auto;">
+            <div id="tutorial-arrow" style="position: absolute; width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-bottom: 10px solid var(--accent-main); top: -10px; left: 50%; transform: translateX(-50%); display: none; z-index: 10006;"></div>
+            
+            <div id="tutorial-step-1" class="tutorial-step-content">
+                <div style="font-size: 3em; margin-bottom: 20px;">🎉</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">Welcome to the Portal!</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">We are excited to celebrate with you! Let's take a quick interactive tour to show you exactly how the buttons work so you can customize your experience.</p>
+                <button class="btn" onclick="nextTutorialStep(2)" style="width: 100%; padding: 15px;">Start the Tour ➔</button>
+            </div>
+            
+            <div id="tutorial-step-2" class="tutorial-step-content" style="display: none;">
+                <div style="font-size: 3em; margin-bottom: 20px;">📱</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">1. Switch Dashboard Layouts</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">Click these buttons to toggle layouts! **Grid View** shows all widgets at once. **Sidebar View** lets you view each widget individually from a clean selector sidebar (perfect for mobile screens!).</p>
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button class="btn" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="nextTutorialStep(1)">Back</button>
+                    <button class="btn" style="flex: 1; padding: 12px;" onclick="nextTutorialStep(3)">Next ➔</button>
+                </div>
+            </div>
+            
+            <div id="tutorial-step-3" class="tutorial-step-content" style="display: none;">
+                <div style="font-size: 3em; margin-bottom: 20px;">👥</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">2. See Who's Coming</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">Click this **Who's Coming tab button** to open the guest list directory, see confirmed attendance statistics, and view other guests' active status updates!</p>
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button class="btn" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="nextTutorialStep(2)">Back</button>
+                    <button class="btn" style="flex: 1; padding: 12px;" onclick="nextTutorialStep(4)">Next ➔</button>
+                </div>
+            </div>
+            
+            <div id="tutorial-step-4" class="tutorial-step-content" style="display: none;">
+                <div style="font-size: 3em; margin-bottom: 20px;">🗺️</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">3. Get Route Directions</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">Click the **Get Route Maps button** inside the Location widget to quickly load Google Maps and find travel routes to the gazebo celebrations in Edinburgh.</p>
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button class="btn" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="nextTutorialStep(3)">Back</button>
+                    <button class="btn" style="flex: 1; padding: 12px;" onclick="nextTutorialStep(5)">Next ➔</button>
+                </div>
+            </div>
+            
+            <div id="tutorial-step-5" class="tutorial-step-content" style="display: none;">
+                <div style="font-size: 3em; margin-bottom: 20px;">⚙️</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">4. Access Settings Options</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">Click this **Settings tab button** to adjust accessibility sizes, choose custom typography styles, select color themes, or reset your account data.</p>
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button class="btn" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="nextTutorialStep(4)">Back</button>
+                    <button class="btn" style="flex: 1; padding: 12px;" onclick="nextTutorialStep(6)">Next ➔</button>
+                </div>
+            </div>
+            
+            <div id="tutorial-step-6" class="tutorial-step-content" style="display: none;">
+                <div style="font-size: 3em; margin-bottom: 20px;">🛠️</div>
+                <h2 style="font-size: 2em; margin-bottom: 15px; color: var(--accent-main);">5. Turn on More Widgets</h2>
+                <p style="margin-bottom: 25px; line-height: 1.6; opacity: 0.9; color: var(--text-adaptive);">We only display 3 widgets by default to keep it clean. But you can add more! Click the **Open Layout Builder button** to toggle and drag checklist items, hype metrics, and secret mission profiles into your dashboard.</p>
+                <div style="display: flex; gap: 10px; justify-content: space-between;">
+                    <button class="btn" style="flex: 1; padding: 12px; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="nextTutorialStep(5)">Back</button>
+                    <button class="btn" style="flex: 1; padding: 12px;" onclick="completeTutorial()">Finish Tour 🎉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </body>
 </html>
