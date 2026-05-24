@@ -448,6 +448,104 @@
             50% { transform: translateY(-4px); }
         }
 
+        /* Floating Help Button */
+        .help-toggle-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 12000;
+            background: var(--accent-main);
+            color: #ffffff !important;
+            border: 2px solid rgba(255,255,255,0.2);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transition: var(--transition);
+        }
+        .help-toggle-btn:hover {
+            transform: scale(1.1) translateY(-2px);
+        }
+        .help-toggle-btn.active {
+            background: #2F855A !important;
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 10px 25px rgba(47,133,90,0.4); }
+            50% { box-shadow: 0 10px 35px rgba(47,133,90,0.7); }
+        }
+
+        /* Custom Tooltips */
+        .help-tooltip {
+            position: absolute;
+            background: var(--bg-main);
+            color: var(--text-adaptive);
+            border: 2px solid var(--accent-main);
+            border-radius: 14px;
+            padding: 10px 14px;
+            font-size: 0.85em;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            pointer-events: none;
+            z-index: 12100;
+            max-width: 250px;
+            text-align: center;
+            animation: fadeUpIn 0.3s ease-out;
+            transition: background-color 0.6s ease, border-color 0.6s ease, color 0.6s ease;
+        }
+        .help-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--accent-main);
+            transition: border-top-color 0.6s ease;
+        }
+        .help-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--bg-main);
+            z-index: 12101;
+            transition: border-top-color 0.6s ease;
+        }
+        .help-tooltip.tooltip-below::after {
+            bottom: auto;
+            top: -10px;
+            border-top: none;
+            border-bottom: 8px solid var(--accent-main);
+        }
+        .help-tooltip.tooltip-below::before {
+            bottom: auto;
+            top: -7px;
+            border-top: none;
+            border-bottom: 6px solid var(--bg-main);
+        }
+
+        /* Visual indicator for interactive help elements */
+        body.help-mode-active [data-help] {
+            cursor: help !important;
+            box-shadow: 0 0 0 3px #2F855A, 0 8px 20px rgba(0,0,0,0.1) !important;
+            border-color: #2F855A !important;
+            transition: all 0.3s ease;
+        }
+
         /* Focus layout stretch styles */
         #focus-layout-container {
             align-items: stretch !important;
@@ -505,21 +603,21 @@
                 
                 <div id="quick-login-container" style="display: none; margin-bottom: 25px; background: rgba(255,255,255,0.4); padding: 20px; border-radius: 20px; border: 1px solid rgba(0,0,0,0.05);">
                     <p style="margin-bottom: 15px; font-weight: bold;">Welcome back!</p>
-                    <button id="quick-login-btn" class="btn" style="width: 100%; padding: 16px; font-size: 1.1em; margin-bottom: 12px;" onclick="quickLogin()">Continue as Guest 🎉</button>
-                    <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="showStandardLogin()">Use a different account</button>
+                    <button id="quick-login-btn" class="btn" style="width: 100%; padding: 16px; font-size: 1.1em; margin-bottom: 12px;" onclick="quickLogin()" data-help="Instantly log back in using your remembered user profile on this device.">Continue as Guest 🎉</button>
+                    <button class="btn" style="width: 100%; padding: 10px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="showStandardLogin()" data-help="Clear your saved quick-login profile and switch to standard manual credentials.">Use a different account</button>
                 </div>
 
                 <div id="standard-login-fields">
                     <div id="login-error" style="background: rgba(255,0,0,0.1); color: #d9534f; padding: 12px; border-radius: 15px; margin-bottom: 20px; display: none; font-weight: bold;">Wrong details, try again!</div>
                     
-                    <input type="text" id="username" placeholder="Username" autocomplete="off">
+                    <input type="text" id="username" placeholder="Username" autocomplete="off" data-help="Type your custom guest username (e.g. oliwier, dawid) as written on your invitation.">
                     
                     <div class="password-container">
-                        <input type="password" id="password" placeholder="Password" style="margin-bottom: 20px;">
-                        <button class="toggle-password-btn" onclick="togglePassword()" id="eye-icon">👁️</button>
+                        <input type="password" id="password" placeholder="Password" style="margin-bottom: 20px;" data-help="Type your unique invite password code to access the party dashboard.">
+                        <button class="toggle-password-btn" onclick="togglePassword()" id="eye-icon" data-help="Show/hide your password text characters.">👁️</button>
                     </div>
 
-                    <button class="btn" onclick="checkLogin()" style="width: 100%; padding: 16px; margin-top: 10px; font-size: 1.1em;">Enter Party  🎉</button>
+                    <button class="btn" onclick="checkLogin()" style="width: 100%; padding: 16px; margin-top: 10px; font-size: 1.1em;" data-help="Submit your invite credentials and log in to the portal dashboard.">Enter Party  🎉</button>
                 </div>
             </div>
         </div>
@@ -531,8 +629,8 @@
                 <h2 style="font-size: 2em; margin-bottom: 15px;">Are you coming? 🗓️</h2>
                 <p style="margin-bottom: 30px; opacity: 0.9; line-height: 1.5; font-size: 1.1em;">Can you join us for the celebrations on <br><strong>June 27th to June 28th</strong>?</p>
                 <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn" onclick="submitInterceptRSVP('Yes, I can make it!')" style="background:#2F855A; flex: 1; min-width: 200px; padding: 16px;">Yes, Absolutely! 👍</button>
-                    <button class="btn" onclick="submitInterceptRSVP('No, unable to attend')" style="background:#d9534f; flex: 1; min-width: 200px; padding: 16px;">No, I can't 👎</button>
+                    <button class="btn" onclick="submitInterceptRSVP('Yes, I can make it!')" style="background:#2F855A; flex: 1; min-width: 200px; padding: 16px;" data-help="Confirm your attendance. This will automatically queue the intro video clip.">Yes, Absolutely! 👍</button>
+                    <button class="btn" onclick="submitInterceptRSVP('No, unable to attend')" style="background:#d9534f; flex: 1; min-width: 200px; padding: 16px;" data-help="Submit that you cannot attend. This logs your RSVP response and forwards you to the dashboard.">No, I can't 👎</button>
                 </div>
             </div>
         </div>
@@ -566,16 +664,16 @@
             <h2 id="greeting" style="font-size: 2.5em; margin-bottom: 25px; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.05);"></h2>
             
             <div class="nav-tabs">
-                <button class="tab-btn active" onclick="showTab('main-dash', event)">🏠 Home</button>
-                <button class="tab-btn" onclick="showTab('attendance-dash', event)">👥 Who's Coming</button>
-                <button class="tab-btn" onclick="showTab('settings-dash', event)">⚙️ Settings</button>
+                <button class="tab-btn active" onclick="showTab('main-dash', event)" data-help="Open the main Home tab containing your widgets and countdown timer.">🏠 Home</button>
+                <button class="tab-btn" onclick="showTab('attendance-dash', event)" data-help="Open the Who's Coming tab to view the guest list, RSVP statuses, and live custom status speech bubbles.">👥 Who's Coming</button>
+                <button class="tab-btn" onclick="showTab('settings-dash', event)" data-help="Open the Settings tab to customize color themes, typography formats, and accessibility triggers.">⚙️ Settings</button>
             </div>
 
             <div id="main-dash" class="tab-content">
                 
                 <div id="layout-toggle-container" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
-                    <button id="layout-grid-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em;" onclick="switchLayoutMode('grid')">📱 Grid View</button>
-                    <button id="layout-focus-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="switchLayoutMode('focus')">🔍 Sidebar View</button>
+                    <button id="layout-grid-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em;" onclick="switchLayoutMode('grid')" data-help="Switch the dashboard layout to show all widgets in a multi-column grid scroll view.">📱 Grid View</button>
+                    <button id="layout-focus-btn" class="btn" style="padding: 10px 20px; font-size: 0.9em; background: rgba(0,0,0,0.05); color: var(--text-adaptive) !important; border: 1px solid rgba(0,0,0,0.1); box-shadow: none;" onclick="switchLayoutMode('focus')" data-help="Switch the dashboard layout to view a single widget at a time via a clean sidebar selector menu.">🔍 Sidebar View</button>
                 </div>
 
                 <div class="dashboard-grid" id="main-widget-grid">
@@ -599,22 +697,22 @@
 
                     <div class="widget-card" id="widget-rsvp">
                         <h3>📞 RSVP Contacts</h3>
-                        <div class="rsvp-row"><div><strong>Mum</strong><br><small>07786 736222</small></div><a href="tel:07786736222" class="btn" style="padding:8px 16px;">Call</a></div>
-                        <div class="rsvp-row"><div><strong>Me (Host)</strong><br><small>07765 338083</small></div><a href="tel:07765338083" class="btn" style="padding:8px 16px;">Call</a></div>
-                        <div class="rsvp-row"><div><strong>Dad</strong><br><small>07796 267930</small></div><a href="tel:07796267930" class="btn" style="padding:8px 16px;">Call</a></div>
+                        <div class="rsvp-row"><div><strong>Mum</strong><br><small>07786 736222</small></div><a href="tel:07786736222" class="btn" style="padding:8px 16px;" data-help="Make a direct phone call to Dominik's mother.">Call</a></div>
+                        <div class="rsvp-row"><div><strong>Me (Host)</strong><br><small>07765 338083</small></div><a href="tel:07765338083" class="btn" style="padding:8px 16px;" data-help="Make a direct phone call to Dominik (Host).">Call</a></div>
+                        <div class="rsvp-row"><div><strong>Dad</strong><br><small>07796 267930</small></div><a href="tel:07796267930" class="btn" style="padding:8px 16px;" data-help="Make a direct phone call to Dominik's father.">Call</a></div>
                     </div>
 
                     <div class="widget-card" id="widget-status">
                         <h3>📍 Update Your Status</h3>
-                        <select id="status-select" onchange="updateMyGlobalStatus()" style="margin-bottom:15px; font-weight:bold;">
+                        <select id="status-select" onchange="updateMyGlobalStatus()" style="margin-bottom:15px; font-weight:bold;" data-help="Select your physical location status (Sitting at home, En Route, At the Gazebo) to broadcast to other attendees.">
                             <option value="🏠 Sitting at home">🏠 Sitting at home</option>
                             <option value="🚗 En Route / Travelling">🚗 En Route / Travelling</option>
                             <option value="🎪 At the Gazebo! 🎉">🎪 At the Gazebo! 🎉</option>
                         </select>
                         <p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Say something to other guests:</p>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="status-custom-input" placeholder="Type a custom message..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="saveCustomStatus()" style="padding:14px 20px;">Post</button>
+                            <input type="text" id="status-custom-input" placeholder="Type a custom message..." style="margin-bottom:0; flex-grow:1;" data-help="Type a custom message (e.g. 'Bringing the soda!'). Hits enter to post.">
+                            <button class="btn" onclick="saveCustomStatus()" style="padding:14px 20px;" data-help="Post your written custom message as a floating speech bubble above your avatar card on the Who's Coming page.">Post</button>
                         </div>
                     </div>
 
@@ -628,8 +726,8 @@
                         <p style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">Ask Dominik anything about the setup, gear, or timetable.</p>
                         <div id="guest-qa-container" style="max-height: 250px; overflow-y:auto; margin-bottom:15px; padding-right:5px;"></div>
                         <div style="display: flex; gap:10px;">
-                            <input type="text" id="guest-question-input" placeholder="Type your question..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="submitGuestQuestion()">Ask</button>
+                            <input type="text" id="guest-question-input" placeholder="Type your question..." style="margin-bottom:0; flex-grow:1;" data-help="Type a question you want to send directly to Dominik's admin answering queue.">
+                            <button class="btn" onclick="submitGuestQuestion()" data-help="Send your typed question to Dominik's queue.">Ask</button>
                         </div>
                     </div>
 
@@ -642,8 +740,8 @@
                         <h3>✅ Custom Checklist</h3>
                         <div class="check-container" id="checklist-box"></div>
                         <div style="display: flex; gap: 10px; margin-top: 15px;">
-                            <input type="text" id="todo-input" placeholder="Add gear to pack..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="addCheckItem()" style="padding:14px 18px;">+</button>
+                            <input type="text" id="todo-input" placeholder="Add gear to pack..." style="margin-bottom:0; flex-grow:1;" data-help="Type a custom item to pack for the party (e.g. 'Jacket', 'Camera'). Hits enter to submit.">
+                            <button class="btn" onclick="addCheckItem()" style="padding:14px 18px;" data-help="Add your typed custom item to your packing list.">+</button>
                         </div>
                     </div>
 
@@ -651,8 +749,8 @@
                         <h3>📌 Notes to Self</h3>
                         <div id="notes-list" style="margin-bottom:15px;"></div>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="note-input" placeholder="Gift ideas..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="saveNote()" style="padding:14px 20px;">Save</button>
+                            <input type="text" id="note-input" placeholder="Gift ideas..." style="margin-bottom:0; flex-grow:1;" data-help="Type a reminder note or gift idea. Hits enter to save.">
+                            <button class="btn" onclick="saveNote()" style="padding:14px 20px;" data-help="Save your typed note to your personal list.">Save</button>
                         </div>
                     </div>
 
@@ -664,7 +762,7 @@
                     <div class="widget-card" id="widget-hype" style="text-align: center;">
                         <h3>🔥 Party Hype Metric</h3>
                         <div style="font-size: 3em; font-weight: bold; margin-bottom: 15px; color: var(--accent-main); line-height:1;" id="hype-count">0</div>
-                        <button class="btn" onclick="addHype()" style="width: 100%; font-size:1.1em; padding:16px;">Pump Hype!</button>
+                        <button class="btn" onclick="addHype()" style="width: 100%; font-size:1.1em; padding:16px;" data-help="Click to pump the party hype score! Increments the live meter for all attendees.">Pump Hype!</button>
                     </div>
 
                     <div class="widget-card full-width" id="widget-location" style="display:flex; flex-wrap:wrap; gap:20px; align-items:center;">
@@ -677,7 +775,7 @@
                             </p>
                         </div>
                         <div style="flex:0 0 auto;">
-                            <button id="location-route-btn" class="btn" style="padding:18px 30px; font-size:1.1em;" onclick="window.open('https://www.google.com/maps/search/59+Lochend+Drive')">Get Route Maps</button>
+                            <button id="location-route-btn" class="btn" style="padding:18px 30px; font-size:1.1em;" onclick="window.open('https://www.google.com/maps/search/59+Lochend+Drive')" data-help="Open Google Maps in a new tab with travel route directions to Edinburgh gazebo.">Get Route Maps</button>
                         </div>
                     </div>
 
@@ -724,8 +822,8 @@
                         <h3>📢 Update Host Status</h3>
                         <p style="font-size:0.9em; opacity:0.8; margin-bottom:12px;">Change the status message shown next to your name on the guest list:</p>
                         <div style="display: flex; gap: 10px;">
-                            <input type="text" id="dom-status-input" placeholder="expecting you there on the day" style="margin-bottom: 0; flex-grow: 1;">
-                            <button class="btn" onclick="saveDomStatus()">Update</button>
+                            <input type="text" id="dom-status-input" placeholder="expecting you there on the day" style="margin-bottom: 0; flex-grow: 1;" data-help="Type your custom host status announcement to show on the guest directory boards.">
+                            <button class="btn" onclick="saveDomStatus()" data-help="Save and broadcast your written host announcement profile to all invitee dashboards.">Update</button>
                         </div>
                     </div>
 
@@ -745,9 +843,9 @@
                         <p style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">Add updates for all guests. The newest updates show at the bottom.</p>
                         <div id="admin-bulletin-list" style="max-height: 250px; overflow-y:auto; margin-bottom:15px; padding-right:5px;"></div>
                         <div style="display: flex; gap: 10px; align-items:center;">
-                            <input type="text" id="new-bulletin-date" placeholder="Date (e.g. Jun 20)" style="margin-bottom:0; flex: 1;">
-                            <input type="text" id="new-bulletin-text" placeholder="Message..." style="margin-bottom:0; flex: 3;">
-                            <button class="btn" onclick="addAdminBulletin()" style="padding:14px 20px;">Add</button>
+                            <input type="text" id="new-bulletin-date" placeholder="Date (e.g. Jun 20)" style="margin-bottom:0; flex: 1;" data-help="Specify the date label for this news bulletin update.">
+                            <input type="text" id="new-bulletin-text" placeholder="Message..." style="margin-bottom:0; flex: 3;" data-help="Type the news update details for the bulletin board.">
+                            <button class="btn" onclick="addAdminBulletin()" style="padding:14px 20px;" data-help="Publish this bulletin message to all guest dashboards in real-time.">Add</button>
                         </div>
                     </div>
 
@@ -756,8 +854,8 @@
                         <p style="font-size:0.9em; opacity:0.8; margin-bottom:15px;">Add clues to the scrolling banner at the top of guest dashboards.</p>
                         <div id="admin-clues-list" style="max-height: 250px; overflow-y:auto; margin-bottom:15px; padding-right:5px;"></div>
                         <div style="display: flex; gap: 10px; align-items:center;">
-                            <input type="text" id="new-clue-text" placeholder="New present hint..." style="margin-bottom:0; flex-grow:1;">
-                            <button class="btn" onclick="addAdminClue()" style="padding:14px 20px;">Add Hint</button>
+                            <input type="text" id="new-clue-text" placeholder="New present hint..." style="margin-bottom:0; flex-grow:1;" data-help="Type a present suggestion hint to display on the rotating ticker at the top of the guest portal dashboard.">
+                            <button class="btn" onclick="addAdminClue()" style="padding:14px 20px;" data-help="Submit and append this clue to the scrolling suggestion ribbon.">Add Hint</button>
                         </div>
                     </div>
 
@@ -828,10 +926,10 @@
                                 <div class="settings-section">
                                     <h4>RSVP Status</h4>
                                     <p style="opacity:0.75; margin-bottom:12px; font-size:0.9em;">Want to change your availability RSVP answer?</p>
-                                    <button class="btn" onclick="resetInterceptRSVP()" style="font-size:0.9em; padding:10px 20px;">✏️ Change RSVP Answer</button>
+                                    <button class="btn" onclick="resetInterceptRSVP()" style="font-size:0.9em; padding:10px 20px;" data-help="Reset your saved invite response so you can re-submit your attendance answer.">✏️ Change RSVP Answer</button>
                                 </div>
                                 <div class="settings-section" style="border:none; margin-top:20px;">
-                                    <button class="btn" style="background:#d9534f; width:100%;" onclick="location.reload()">Log Out</button>
+                                    <button class="btn" style="background:#d9534f; width:100%;" onclick="location.reload()" data-help="Log out of your current account profile and return to the credentials entry login gate.">Log Out</button>
                                 </div>
                             </div>
 
@@ -840,7 +938,7 @@
                                 <div class="settings-section">
                                     <h3>📐 Customize Dashboard Layout</h3>
                                     <p style="opacity: 0.8; margin-bottom: 15px;">Rearrange or hide widgets on your homepage screen.</p>
-                                    <button id="open-layout-builder-btn" class="btn" onclick="openWidgetBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;">⚙️ Open Layout Builder</button>
+                                    <button id="open-layout-builder-btn" class="btn" onclick="openWidgetBuilder()" style="width:100%; padding:15px; font-size:1.1em; background:#2F855A;" data-help="Open the interactive drag-and-drop dashboard panel to hide or re-order widgets.">⚙️ Open Layout Builder</button>
                                 </div>
 
                                 <div class="settings-section">
@@ -855,37 +953,37 @@
                                 <h3>Choose a Theme Color</h3>
                                 <p style="opacity:0.8; margin-bottom:15px;">Select a color scheme for the website:</p>
                                 <div class="theme-packs-grid" id="themes-wrapper">
-                                    <div class="theme-card-button" onclick="setTheme('#FAF6EF', '#5C4033')"><div class="theme-dot-preview" style="background:#FAF6EF; border-color:#5C4033"></div>Sand</div>
-                                    <div class="theme-card-button" onclick="setTheme('#1A202C', '#63B3ED')"><div class="theme-dot-preview" style="background:#1A202C; border-color:#63B3ED"></div>Midnight</div>
-                                    <div class="theme-card-button" onclick="setTheme('#F0FFF4', '#2F855A')"><div class="theme-dot-preview" style="background:#F0FFF4; border-color:#2F855A"></div>Forest</div>
-                                    <div class="theme-card-button" onclick="setTheme('#2D1B2E', '#E9B5D8')"><div class="theme-dot-preview" style="background:#2D1B2E; border-color:#E9B5D8"></div>Plum</div>
-                                    <div class="theme-card-button" onclick="setTheme('#3B1E54', '#D0BFFF')"><div class="theme-dot-preview" style="background:#3B1E54; border-color:#D0BFFF"></div>Dom's Fav</div>
-                                    <div class="theme-card-button" onclick="setTheme('#0D0D0D', '#00FF66')"><div class="theme-dot-preview" style="background:#0D0D0D; border-color:#00FF66"></div>Retro Arcade</div>
-                                    <div class="theme-card-button" onclick="setTheme('#E2E8F0', '#1C3D27')"><div class="theme-dot-preview" style="background:#E2E8F0; border-color:#1C3D27"></div>Highlands</div>
+                                    <div class="theme-card-button" onclick="setTheme('#FAF6EF', '#5C4033')" data-help="Select the default classic cozy sand and brown theme."><div class="theme-dot-preview" style="background:#FAF6EF; border-color:#5C4033"></div>Sand</div>
+                                    <div class="theme-card-button" onclick="setTheme('#1A202C', '#63B3ED')" data-help="Select the cool dark midnight blue and sky blue accent theme."><div class="theme-dot-preview" style="background:#1A202C; border-color:#63B3ED"></div>Midnight</div>
+                                    <div class="theme-card-button" onclick="setTheme('#F0FFF4', '#2F855A')" data-help="Select the fresh mint green forest theme."><div class="theme-dot-preview" style="background:#F0FFF4; border-color:#2F855A"></div>Forest</div>
+                                    <div class="theme-card-button" onclick="setTheme('#2D1B2E', '#E9B5D8')" data-help="Select the deep twilight plum and rose gold theme."><div class="theme-dot-preview" style="background:#2D1B2E; border-color:#E9B5D8"></div>Plum</div>
+                                    <div class="theme-card-button" onclick="setTheme('#3B1E54', '#D0BFFF')" data-help="Select Dominik's signature deep violet and lavender theme."><div class="theme-dot-preview" style="background:#3B1E54; border-color:#D0BFFF"></div>Dom's Fav</div>
+                                    <div class="theme-card-button" onclick="setTheme('#0D0D0D', '#00FF66')" data-help="Select the neon retro arcade terminal green and black theme."><div class="theme-dot-preview" style="background:#0D0D0D; border-color:#00FF66"></div>Retro Arcade</div>
+                                    <div class="theme-card-button" onclick="setTheme('#E2E8F0', '#1C3D27')" data-help="Select the premium highlands emerald green and slate theme."><div class="theme-dot-preview" style="background:#E2E8F0; border-color:#1C3D27"></div>Highlands</div>
                                 </div>
 
                                 <h4 style="margin:25px 0 15px 0;">Create Custom Theme</h4>
                                 <div style="margin-bottom: 20px;">
-                                    <button class="btn" onclick="generateRandomTheme()" style="width: 100%; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); border: none; font-size: 1.05em; padding: 15px; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);">🎲 Random Colors</button>
+                                    <button class="btn" onclick="generateRandomTheme()" style="width: 100%; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); border: none; font-size: 1.05em; padding: 15px; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);" data-help="Randomly generate a beautiful color palette combination for your dashboard.">🎲 Random Colors</button>
                                 </div>
                                 <div class="color-picker-ui">
-                                    <div class="color-box" id="bg-display" onclick="document.getElementById('bg-picker').click()"></div>
+                                    <div class="color-box" id="bg-display" onclick="document.getElementById('bg-picker').click()" data-help="Pick a custom dashboard background color."></div>
                                     <input type="color" id="bg-picker" oninput="customTheme()">
                                     <strong>Background Color</strong>
                                 </div>
                                 <div class="color-picker-ui">
-                                    <div class="color-box" id="accent-display" onclick="document.getElementById('accent-picker').click()"></div>
+                                    <div class="color-box" id="accent-display" onclick="document.getElementById('accent-picker').click()" data-help="Pick a custom interactive highlight accent color."></div>
                                     <input type="color" id="accent-picker" oninput="customTheme()">
                                     <strong>Highlight Accent Color</strong>
                                 </div>
                                 <div style="display:flex; gap:10px; margin-top:15px; align-items:center;">
-                                    <input type="text" id="custom-theme-name" placeholder="Theme name..." style="margin-bottom:0; flex-grow:1;">
-                                    <button class="btn" onclick="saveCustomPreset()" style="font-size:0.9em; padding:12px 20px;">Save Theme</button>
+                                    <input type="text" id="custom-theme-name" placeholder="Theme name..." style="margin-bottom:0; flex-grow:1;" data-help="Type a name to identify your custom created color theme preset.">
+                                    <button class="btn" onclick="saveCustomPreset()" style="font-size:0.9em; padding:12px 20px;" data-help="Save your current custom background and accent colors as a named preset on your account.">Save Theme</button>
                                 </div>
 
                                 <h4 style="margin:30px 0 10px 0; border-top:1px solid rgba(128,128,128,0.15); padding-top:20px;">Choose a Font</h4>
                                 <p style="opacity:0.8; margin-bottom:12px; font-size:0.9em;">Select a font for the site:</p>
-                                <select id="font-family-select" onchange="previewAndApplyFont()" style="font-weight:bold;">
+                                <select id="font-family-select" onchange="previewAndApplyFont()" style="font-weight:bold;" data-help="Select a custom web typography style for the portal dashboard layout.">
                                     <optgroup label="Cozy & Rounded Formats">
                                         <option value="'Varela Round', sans-serif">🟢 Varela Round (Warm Fluid Default)</option>
                                         <option value="'Fredoka', sans-serif">🎈 Fredoka (Bold Playful Rounded Sans)</option>
@@ -920,15 +1018,15 @@
                                 <p style="opacity:0.8; margin-bottom:15px;">Adjust settings for easier viewing:</p>
                                 <div class="toggle-row">
                                     <span><strong>Stop Background Animation</strong><br><small style="opacity:0.7;">Turns off the floating background circles</small></span>
-                                    <label class="switch"><input type="checkbox" id="motion-toggle" onchange="toggleMotion()"><span class="slider"></span></label>
+                                    <label class="switch"><input type="checkbox" id="motion-toggle" onchange="toggleMotion()" data-help="Disable floating ambient bubbles in the background to reduce motion."><span class="slider"></span></label>
                                 </div>
                                 <div class="toggle-row">
                                     <span><strong>Larger Text Size</strong><br><small style="opacity:0.7;">Makes all text bigger on the website</small></span>
-                                    <label class="switch"><input type="checkbox" id="font-toggle" onchange="toggleFont()"><span class="slider"></span></label>
+                                    <label class="switch"><input type="checkbox" id="font-toggle" onchange="toggleFont()" data-help="Increase text scaling sizes throughout the application layout."><span class="slider"></span></label>
                                 </div>
                                 <div class="toggle-row" style="margin-top: 15px;">
                                     <span><strong>Welcome Guide</strong><br><small style="opacity:0.7;">Replay the interactive tutorial for the website</small></span>
-                                    <button class="btn" style="padding:10px 15px; font-size:0.85em;" onclick="replayTutorial()">Replay Guide</button>
+                                    <button class="btn" style="padding:10px 15px; font-size:0.85em;" onclick="replayTutorial()" data-help="Re-trigger the step-by-step interactive onboarding guide.">Replay Guide</button>
                                 </div>
                             </div>
 
@@ -939,23 +1037,23 @@
                                 <div style="display:flex; flex-direction:column; gap:15px;">
                                     <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                                         <div><strong>Reset Checklist</strong><br><small style="opacity:0.7;">Clears your checklist items.</small></div>
-                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeChecklistData()">Reset Checklist</button>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeChecklistData()" data-help="Clear all of your checklist checklist items.">Reset Checklist</button>
                                     </div>
                                     
                                     <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                                         <div><strong>Delete Custom Themes</strong><br><small style="opacity:0.7;">Deletes the custom color schemes you saved.</small></div>
-                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeCustomThemesData()">Delete Themes</button>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#A67B5B;" onclick="purgeCustomThemesData()" data-help="Delete all saved custom theme color presets.">Delete Themes</button>
                                     </div>
 
                                     <div style="background:rgba(0,0,0,0.02); padding:15px; border-radius:15px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                                         <div><strong>Reset My Account</strong><br><small style="opacity:0.7;">Wipes your layout, theme, checklist, status, and notes, returning your account to default settings.</small></div>
-                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#d9534f;" onclick="resetMyAccountData()">Reset Account</button>
+                                        <button class="btn" style="padding:10px 15px; font-size:0.85em; background:#d9534f;" onclick="resetMyAccountData()" data-help="Wipe all layout settings, theme configurations, custom status values, and checklists to start fresh.">Reset Account</button>
                                     </div>
 
                                     <div id="admin-factory-reset-section" style="background:rgba(217,83,79,0.05); border:1px dashed #d9534f; padding:20px; border-radius:20px; margin-top:15px; display:none;">
                                         <h4 style="color:#d9534f; margin-bottom:5px;">⚠️ Full Reset</h4>
                                         <p style="font-size:0.85em; opacity:0.8; margin-bottom:15px;">Wipes all saved changes on this device, including bulletins, clues, layouts, questions, and accounts. Restores the site to its original default state.</p>
-                                        <button class="btn" style="background:#d9534f; width:100%; font-size:0.9em; padding:12px;" onclick="factoryHardResetSystem()">Execute Full Reset</button>
+                                        <button class="btn" style="background:#d9534f; width:100%; font-size:0.9em; padding:12px;" onclick="factoryHardResetSystem()" data-help="Completely purge all database status profiles, bulletins, inquiries, and host presets.">Execute Full Reset</button>
                                     </div>
                                 </div>
                             </div>
@@ -2405,6 +2503,109 @@
                 sEl.innerText = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
             }, 1000);
         }
+
+        // =========================================================================
+        // --- HELP MODE INSPECTOR ENGINE ---
+        // =========================================================================
+        let activeHelpTooltip = null;
+        let mobileTooltipTimeout = null;
+
+        function toggleHelpMode() {
+            const body = document.body;
+            const btn = document.getElementById('help-toggle-btn');
+            body.classList.toggle('help-mode-active');
+            
+            if (body.classList.contains('help-mode-active')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+                removeHelpTooltip();
+            }
+        }
+
+        function showHelpTooltip(target, text) {
+            removeHelpTooltip();
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'help-tooltip';
+            tooltip.innerText = text;
+            document.body.appendChild(tooltip);
+            activeHelpTooltip = tooltip;
+
+            const rect = target.getBoundingClientRect();
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+            const targetCenter = rect.left + rect.width / 2;
+            const tooltipWidth = tooltip.offsetWidth;
+            const tooltipHeight = tooltip.offsetHeight;
+
+            let top = rect.top - tooltipHeight - 12;
+            let left = targetCenter - tooltipWidth / 2;
+
+            if (top < 10) {
+                top = rect.bottom + 12;
+                tooltip.classList.add('tooltip-below');
+            }
+
+            if (left < 10) left = 10;
+            if (left + tooltipWidth > window.innerWidth) {
+                left = window.innerWidth - tooltipWidth - 10;
+            }
+
+            tooltip.style.top = `${top + scrollTop}px`;
+            tooltip.style.left = `${left + scrollLeft}px`;
+        }
+
+        function removeHelpTooltip() {
+            if (activeHelpTooltip) {
+                activeHelpTooltip.remove();
+                activeHelpTooltip = null;
+            }
+            if (mobileTooltipTimeout) {
+                clearTimeout(mobileTooltipTimeout);
+                mobileTooltipTimeout = null;
+            }
+        }
+
+        // Event Listeners for Help Mode (Desktop hover and Mobile tap interception)
+        document.addEventListener('mouseover', function(e) {
+            if (!document.body.classList.contains('help-mode-active')) return;
+            const target = e.target.closest('[data-help]');
+            if (target && target.id !== 'help-toggle-btn') {
+                showHelpTooltip(target, target.getAttribute('data-help'));
+            }
+        });
+
+        document.addEventListener('mouseout', function(e) {
+            if (!document.body.classList.contains('help-mode-active')) return;
+            const target = e.target.closest('[data-help]');
+            if (target) {
+                removeHelpTooltip();
+            }
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!document.body.classList.contains('help-mode-active')) return;
+            
+            // Do not intercept if clicking the help toggle itself
+            if (e.target.closest('#help-toggle-btn')) return;
+
+            const target = e.target.closest('[data-help]');
+            if (target) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                showHelpTooltip(target, target.getAttribute('data-help'));
+                
+                if (mobileTooltipTimeout) clearTimeout(mobileTooltipTimeout);
+                mobileTooltipTimeout = setTimeout(() => {
+                    removeHelpTooltip();
+                }, 4000);
+            } else {
+                removeHelpTooltip();
+            }
+        }, true); // Capture phase is critical to intercept click handlers on widgets/buttons
     </script>
 
     <!-- Login Tutorial Overlay Background Mask -->
@@ -2474,6 +2675,9 @@
         </div>
     </div>
 
+    <!-- Floating Help Button -->
+    <button id="help-toggle-btn" class="help-toggle-btn" onclick="toggleHelpMode()" title="Toggle Help Inspect Mode">❓</button>
 
 </body>
 </html>
+        
